@@ -8,8 +8,11 @@
       :eventLimit="eventLimit"
       :eventSources="eventSources"
       :selectable="selectable"
+      :showNonCurrentDates="showNonCurrentDates"
+      :fixedWeekCount="fixedWeekCount"
       @eventClick="handleEventClick"
       @select="handleSelect"
+      class="Calendar"
     />
   </div>
 </template>
@@ -45,6 +48,8 @@ export default {
       locale: "ko",
       selectable: true,
       eventLimit: true,
+      showNonCurrentDates: true, // 해당 달 이외의 날짜정보 hidden
+      fixedWeekCount: false, //항상 6줄의 위크카운트를 보여줄것인가
       eventSources: [
         {
           events: [
@@ -72,8 +77,25 @@ export default {
             }
             // etc...
           ],
-          color: "orange", // an option!
-          textColor: "black" // an option!
+          className: "normal-event"
+        },
+        {
+          events: [
+            {
+              id: 5,
+              title: "long event1",
+              start: "2019-09-01",
+              end: "2019-09-09T12:30:00"
+            },
+            {
+              id: 6,
+              title: "long event2",
+              start: "2019-09-05T12:30:00",
+              end: "2019-09-09T12:30:00"
+            }
+            // etc...
+          ],
+          className: "long-event"
         }
       ],
       events: [
@@ -84,7 +106,8 @@ export default {
         }
       ]
     };
-  }
+  },
+  mounted() {}
 };
 </script>
 
@@ -99,30 +122,99 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 30px;
+  .Calendar {
+    .fc-day-header {
+      padding: 1rem 0;
+    }
+    .fc-center {
+      display: flex;
+    }
+    &.fc-unthemed {
+      .fc-head {
+        td {
+          border-bottom: 1px solid rgba(255, 255, 255, 0);
+        }
+      }
+      .fc-popover {
+        .fc-header {
+          background: white;
+        }
+      }
+    }
+    .fc-day-header {
+      position: relative;
+      &::after {
+        /* 일월화수목금토 아래 border를 투명하게했기때문에 생긴 우측 border빈공간을 채우기 위한 것 */
+        content: "";
+        display: block;
+        border-right: 1px solid #dddddd;
+        width: 0;
+        height: 1px;
+        position: absolute;
+        top: 100%;
+        left: 100%;
+      }
+    }
+    .fc-day-top {
+      position: relative;
+      .fc-day-number {
+        float: left;
+        position: relative;
+        padding: 0.5rem;
+        left: 50%;
+        transform: translate(-50%, 0);
+      }
+    }
+    .fc-event {
+      cursor: pointer;
+      line-height: 0.7rem;
+      background: rgba(255, 255, 255, 0);
+      color: #000000;
+      padding-left: 1.3rem;
+      border: 0;
+      &:hover {
+        background: rgba(90, 90, 90, 0.1);
+      }
+      .fc-content {
+        padding: 0.3rem;
+      }
 
-  .fc-day-header {
-    padding: 1rem 0;
-  }
-  .fc-center {
-    display: flex;
-  }
-  .fc-event {
-    padding: 0.1rem;
-    margin-bottom: 0.1rem;
-    cursor: pointer;
-  }
-  .fc-day-number {
-    padding: 0.5rem;
-  }
-  .fc-sat {
-    color: blue;
-  }
-  .fc-sun {
-    color: red;
-  }
+      &.normal-event {
+        &::before {
+          content: "";
+          display: block;
+          width: 0.5rem;
+          height: 0.5rem;
+          background: rgb(167, 155, 142);
+          position: absolute;
+          top: 50%;
+          left: 0.5rem;
+          transform: translate(0, -45%);
+          border-radius: 50%;
+        }
+      }
+      &.long-event {
+        background: rgb(167, 155, 142);
+        color: #ffffff;
+        padding-left: 0.3rem;
+      }
+    }
+    .fc-more-popover {
+      .fc-event-container {
+        padding: 0.5rem;
+      }
+    }
 
-  .fc-popover.fc-more-popover {
-    border-radius: 0.5rem;
+    .fc-sat {
+      color: blue;
+    }
+    .fc-sun {
+      color: red;
+    }
+
+    .fc-popover.fc-more-popover {
+      border-radius: 0.5rem;
+    }
   }
 }
 </style>
