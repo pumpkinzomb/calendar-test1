@@ -4,20 +4,23 @@
       defaultView="dayGridMonth"
       :plugins="calendarPlugins"
       :header="header"
-      :locale="locale"
       :eventLimit="eventLimit"
       :eventSources="eventSources"
       :selectable="selectable"
       :showNonCurrentDates="showNonCurrentDates"
       :fixedWeekCount="fixedWeekCount"
+      :titleFormat="titleFormat"
       @eventClick="handleEventClick"
       @select="handleSelect"
+      @datesRender="handleDatesRender"
       class="Calendar"
+      ref="fullCalendar"
     />
   </div>
 </template>
 
 <script>
+/* eslint-disable */
 import FullCalendar from "@fullcalendar/vue";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
@@ -35,6 +38,50 @@ export default {
     },
     handleSelect(info) {
       console.log(info);
+    },
+    handleDatesRender(info) {
+      let calendarApi = this.$refs.fullCalendar.getApi();
+      setTimeout(
+        function() {
+          let calendarApi = this.$refs.fullCalendar.getApi();
+          let eventSources = {
+            events: [
+              {
+                id: 0,
+                title: "change1",
+                start: "2019-09-01",
+                end: "2019-09-10"
+              },
+              {
+                id: 1,
+                title: "change2",
+                start: "2019-09-05T12:30:00",
+                end: "2019-09-09T12:30:00"
+              },
+              {
+                id: 2,
+                title: "change3",
+                start: "2019-09-05"
+              },
+              {
+                id: 4,
+                title: "change4",
+                start: "2019-09-05"
+              }
+              // etc...
+            ],
+            className: "normal-event"
+          };
+
+          let test = calendarApi.getEventSources();
+          for (let source of test) {
+            source.remove();
+          }
+          calendarApi.addEventSource(eventSources);
+        }.bind(this),
+        3000
+      );
+      console.log(calendarApi.getDate());
     }
   },
   data() {
@@ -45,7 +92,11 @@ export default {
         center: "prev title next",
         right: "today"
       },
-      locale: "ko",
+      titleFormat: function(dateData) {
+        const title = new Date(dateData.date.marker);
+        return `${title.getFullYear()}. ${title.getMonth()} `;
+      },
+      // locale: "ko",
       selectable: true,
       eventLimit: true,
       showNonCurrentDates: true, // 해당 달 이외의 날짜정보 hidden
@@ -107,7 +158,12 @@ export default {
       ]
     };
   },
-  mounted() {}
+  mounted() {
+    console.log("rendered");
+  },
+  updated() {
+    console.log("updated");
+  }
 };
 </script>
 
