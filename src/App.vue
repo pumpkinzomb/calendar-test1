@@ -1,21 +1,25 @@
 <template>
   <div id="app">
     <FullCalendar
-      defaultView="dayGridMonth"
       :plugins="calendarPlugins"
-      :header="header"
-      :eventLimit="eventLimit"
-      :eventSources="eventSources"
-      :selectable="selectable"
-      :showNonCurrentDates="showNonCurrentDates"
-      :fixedWeekCount="fixedWeekCount"
-      :titleFormat="titleFormat"
+      defaultView="dayGridMonth"
       @eventClick="handleEventClick"
       @select="handleSelect"
       @datesRender="handleDatesRender"
+      :header="calendarConfig.header"
+      :eventLimit="calendarConfig.eventLimit"
+      :selectable="calendarConfig.selectable"
+      :showNonCurrentDates="calendarConfig.showNonCurrentDates"
+      :fixedWeekCount="calendarConfig.fixedWeekCount"
+      :titleFormat="calendarConfig.titleFormat"
       class="Calendar"
       ref="fullCalendar"
     />
+    <EventDetailPopup
+      v-if="event_detail_popup.view"
+      :eventDetailInfo="event_detail_popup"
+      :style="{position:'absolute',top: event_detail_popup.coordinates.y,left: event_detail_popup.coordinates.x, }"
+    ></EventDetailPopup>
   </div>
 </template>
 
@@ -24,17 +28,33 @@
 import FullCalendar from "@fullcalendar/vue";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
-
+import EventDetailPopup from "./components/EventDetailPopup.vue";
+import CALENDAR_DEFAULT from "@/utils/calendar_default.js";
 export default {
   name: "app",
   components: {
-    FullCalendar
+    FullCalendar,
+    EventDetailPopup
   },
   methods: {
     handleEventClick(info) {
-      console.log(`${info.event.title} ${info.event.id}`);
       console.log(info);
       // info.el.style.backgroundColor = "red";
+      const testInfo = {
+        view: true,
+        title: info.event.title,
+        date_start: info.event.start,
+        date_end: info.event.end,
+        attendance_list: [],
+        attendance_list_all: 0,
+        attendance_list_accept_number: 0,
+        event_description: info.event.title,
+        coordinates: { x: info.jsEvent.pageX, y: info.jsEvent.pageY }
+      };
+      this.event_detail_popup = testInfo;
+    },
+    handleDetailClose() {
+      this.event_detail_popup.view = false;
     },
     handleSelect(info) {
       console.log(info);
@@ -87,80 +107,20 @@ export default {
   data() {
     return {
       calendarPlugins: [dayGridPlugin, interactionPlugin],
-      header: {
-        left: "",
-        center: "prev title next",
-        right: "today"
-      },
-      titleFormat: function(dateData) {
-        const title = new Date(dateData.date.marker);
-        return `${title.getFullYear()}. ${title.getMonth()} `;
-      },
-      // locale: "ko",
-      selectable: true,
-      eventLimit: true,
-      showNonCurrentDates: true, // 해당 달 이외의 날짜정보 hidden
-      fixedWeekCount: false, //항상 6줄의 위크카운트를 보여줄것인가
-      eventSources: [
-        {
-          events: [
-            {
-              id: 0,
-              title: "my event",
-              start: "2019-09-01",
-              end: "2019-09-10"
-            },
-            {
-              id: 1,
-              title: "Event2",
-              start: "2019-09-05T12:30:00",
-              end: "2019-09-09T12:30:00"
-            },
-            {
-              id: 2,
-              title: "Event3",
-              start: "2019-09-05"
-            },
-            {
-              id: 4,
-              title: "Event4",
-              start: "2019-09-05"
-            }
-            // etc...
-          ],
-          className: "normal-event"
-        },
-        {
-          events: [
-            {
-              id: 5,
-              title: "long event1",
-              start: "2019-09-01",
-              end: "2019-09-09T12:30:00"
-            },
-            {
-              id: 6,
-              title: "long event2",
-              start: "2019-09-05T12:30:00",
-              end: "2019-09-09T12:30:00"
-            }
-            // etc...
-          ],
-          className: "long-event"
-        }
-      ],
-      events: [
-        {
-          title: "My Event",
-          start: "2019-09-11",
-          url: "http://google.com/"
-        }
-      ]
+      calendarConfig: CALENDAR_DEFAULT,
+      event_detail_popup: {
+        view: false,
+        title: "",
+        date: "",
+        attendance_list: [],
+        attendance_list_all: 0,
+        attendance_list_accept_number: 0,
+        event_description: "",
+        coordinates: { x: 0, y: 0 }
+      }
     };
   },
-  mounted() {
-    console.log("rendered");
-  },
+  mounted() {},
   updated() {
     console.log("updated");
   }
