@@ -6,11 +6,13 @@
       @eventClick="handleEventClick"
       @select="handleSelect"
       @datesRender="handleDatesRender"
+      @windowResize="handleWindowResize"
       :header="calendarConfig.header"
       :eventLimit="calendarConfig.eventLimit"
       :selectable="calendarConfig.selectable"
       :showNonCurrentDates="calendarConfig.showNonCurrentDates"
       :fixedWeekCount="calendarConfig.fixedWeekCount"
+      :dayPopoverFormat="calendarConfig.dayPopoverFormat"
       :titleFormat="calendarConfig.titleFormat"
       class="Calendar"
       ref="fullCalendar"
@@ -18,8 +20,11 @@
     <EventDetailPopup
       v-if="event_detail_popup.view"
       :eventDetailInfo="event_detail_popup"
-      :style="{position:'absolute',top: event_detail_popup.coordinates.y,left: event_detail_popup.coordinates.x, }"
+      ref="detailPopup"
     ></EventDetailPopup>
+    <!-- 
+      :style="{position:'absolute',top: `${event_detail_popup.coordinates.y}px`,left: `${event_detail_popup.coordinates.x}px`, }"
+    -->
   </div>
 </template>
 
@@ -40,6 +45,7 @@ export default {
     handleEventClick(info) {
       console.log(info);
       // info.el.style.backgroundColor = "red";
+
       const testInfo = {
         view: true,
         title: info.event.title,
@@ -51,16 +57,22 @@ export default {
         event_description: info.event.title,
         coordinates: { x: info.jsEvent.pageX, y: info.jsEvent.pageY }
       };
+
       this.event_detail_popup = testInfo;
     },
-    handleDetailClose() {
+    handleDetailPopupClose() {
       this.event_detail_popup.view = false;
     },
     handleSelect(info) {
       console.log(info);
     },
+    handleWindowResize(info) {
+      this.calendarSize = {
+        width: info.calendar.el.offsetWidth,
+        height: info.calendar.el.offsetHeight
+      };
+    },
     handleDatesRender(info) {
-      let calendarApi = this.$refs.fullCalendar.getApi();
       setTimeout(
         function() {
           let calendarApi = this.$refs.fullCalendar.getApi();
@@ -69,8 +81,8 @@ export default {
               {
                 id: 0,
                 title: "change1",
-                start: "2019-09-01",
-                end: "2019-09-10"
+                start: "2019-09-30",
+                end: "2019-09-30"
               },
               {
                 id: 1,
@@ -86,7 +98,22 @@ export default {
               {
                 id: 4,
                 title: "change4",
-                start: "2019-09-05"
+                start: "2019-09-06"
+              },
+              {
+                id: 5,
+                title: "change5",
+                start: "2019-09-30"
+              },
+              {
+                id: 6,
+                title: "change6",
+                start: "2019-09-30"
+              },
+              {
+                id: 7,
+                title: "change7",
+                start: "2019-09-30"
               }
               // etc...
             ],
@@ -99,9 +126,8 @@ export default {
           }
           calendarApi.addEventSource(eventSources);
         }.bind(this),
-        3000
+        1000
       );
-      console.log(calendarApi.getDate());
     }
   },
   data() {
@@ -117,10 +143,20 @@ export default {
         attendance_list_accept_number: 0,
         event_description: "",
         coordinates: { x: 0, y: 0 }
+      },
+      calendarSize: {
+        width: 0,
+        height: 0
       }
     };
   },
-  mounted() {},
+  mounted() {
+    this.calendarSize = {
+      width: this.$refs.fullCalendar.$el.offsetWidth,
+      height: this.$refs.fullCalendar.$el.offsetHeight
+    };
+    console.log("rendered");
+  },
   updated() {
     console.log("updated");
   }
@@ -209,13 +245,24 @@ export default {
           border-radius: 50%;
         }
       }
-      &.long-event {
-        background: rgb(167, 155, 142);
-        color: #ffffff;
-        padding-left: 0.3rem;
-      }
     }
     .fc-more-popover {
+      box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.14),
+        0 9px 46px 8px rgba(0, 0, 0, 0.12), 0 11px 15px -7px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+      border: none;
+      .fc-header {
+        .fc-title {
+          margin: auto;
+          font-weight: bold;
+          font-size: 1.5rem;
+          padding: 0.8rem;
+        }
+        .fc-close {
+          position: absolute;
+          right: 0.8rem;
+        }
+      }
       .fc-event-container {
         padding: 0.5rem;
       }
