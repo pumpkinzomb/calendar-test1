@@ -1,5 +1,19 @@
 <template>
   <div id="app">
+    <div class="sort-type">
+      <ul>
+        <li>사람 A</li>
+        <li>사람 B</li>
+        <li>사람 C</li>
+        <li>사람 D</li>
+      </ul>
+      <ul>
+        <li>이벤트 A</li>
+        <li>이벤트 B</li>
+        <li>이벤트 C</li>
+        <li>이벤트 D</li>
+      </ul>
+    </div>
     <FullCalendar
       :plugins="calendarPlugins"
       defaultView="dayGridMonth"
@@ -35,6 +49,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import EventDetailPopup from "./components/EventDetailPopup.vue";
 import CALENDAR_DEFAULT from "@/utils/calendar_default.js";
+import "reset-css";
 export default {
   name: "app",
   components: {
@@ -45,7 +60,7 @@ export default {
     handleEventClick(info) {
       console.log(info);
       // info.el.style.backgroundColor = "red";
-
+      this.handleDetailPopupClose();
       const testInfo = {
         view: true,
         title: info.event.title,
@@ -55,7 +70,8 @@ export default {
         attendance_list_all: 0,
         attendance_list_accept_number: 0,
         event_description: info.event.title,
-        coordinates: { x: info.jsEvent.pageX, y: info.jsEvent.pageY }
+        coordinates: { x: info.jsEvent.pageX, y: info.jsEvent.pageY },
+        groupName: "group1"
       };
 
       this.event_detail_popup = testInfo;
@@ -65,12 +81,14 @@ export default {
     },
     handleSelect(info) {
       console.log(info);
+      this.handleDetailPopupClose();
     },
     handleWindowResize(info) {
       this.calendarSize = {
         width: info.calendar.el.offsetWidth,
         height: info.calendar.el.offsetHeight
       };
+      this.handleDetailPopupClose();
     },
     handleDatesRender(info) {
       setTimeout(
@@ -114,6 +132,11 @@ export default {
                 id: 7,
                 title: "change7",
                 start: "2019-09-30"
+              },
+              {
+                id: 8,
+                title: "change7",
+                start: "2019-09-11"
               }
               // etc...
             ],
@@ -174,7 +197,19 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 30px;
+  display: flex;
+  .sort-type {
+    ul {
+      width: 200px;
+    }
+  }
   .Calendar {
+    position: relative;
+    .fc-today-button {
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
     .fc-day-header {
       padding: 1rem 0;
     }
@@ -267,12 +302,26 @@ export default {
         padding: 0.5rem;
       }
     }
-
+    .fc-today {
+      background: rgba(255, 255, 255, 0);
+      .fc-day-number {
+        margin: 0.5rem 0;
+        padding: 0;
+        width: 2rem;
+        height: 2rem;
+        line-height: 2rem;
+        text-align: center;
+        background: #1a73e8;
+        color: #ffffff;
+        border-radius: 50%;
+        box-sizing: border-box;
+      }
+    }
     .fc-sat {
-      color: blue;
+      // color: blue;
     }
     .fc-sun {
-      color: red;
+      // color: red;
     }
 
     .fc-popover.fc-more-popover {

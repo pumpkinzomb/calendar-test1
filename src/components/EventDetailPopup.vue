@@ -37,50 +37,35 @@ export default {
   methods: {
     handleClose() {
       this.$parent.handleDetailPopupClose();
+    },
+    calculatePosition() {
+      let calendarSize = this.$parent.calendarSize;
+      let thisPopupSize = {
+        width: this.$el.offsetWidth,
+        height: this.$el.offsetHeight
+      };
+      let calculateX =
+        this.eventDetailInfo.coordinates.x + 15 + thisPopupSize.width >
+        calendarSize.width
+          ? this.eventDetailInfo.coordinates.x - thisPopupSize.width - 15
+          : this.eventDetailInfo.coordinates.x + 15;
+      let calculateY =
+        this.eventDetailInfo.coordinates.y + thisPopupSize.height >
+        calendarSize.height
+          ? this.eventDetailInfo.coordinates.y - thisPopupSize.height
+          : this.eventDetailInfo.coordinates.y;
+      this.coordinates = {
+        x: calculateX,
+        y: calculateY
+      };
     }
   },
   mounted() {
-    let calendarSize = this.$parent.calendarSize;
-    let thisPopupSize = {
-      width: this.$el.offsetWidth,
-      height: this.$el.offsetHeight
-    };
-    let calculateX =
-      this.eventDetailInfo.coordinates.x + 15 + thisPopupSize.width >
-      calendarSize.width
-        ? this.eventDetailInfo.coordinates.x - thisPopupSize.width - 15
-        : this.eventDetailInfo.coordinates.x + 15;
-    let calculateY =
-      this.eventDetailInfo.coordinates.y + thisPopupSize.height >
-      calendarSize.height
-        ? this.eventDetailInfo.coordinates.y - thisPopupSize.height
-        : this.eventDetailInfo.coordinates.y;
-    this.coordinates = {
-      x: calculateX,
-      y: calculateY
-    };
+    this.calculatePosition();
     console.log("rendered");
   },
   beforeUpdate() {
-    let calendarSize = this.$parent.calendarSize;
-    let thisPopupSize = {
-      width: this.$el.offsetWidth,
-      height: this.$el.offsetHeight
-    };
-    let calculateX =
-      this.eventDetailInfo.coordinates.x + 15 + thisPopupSize.width >
-      calendarSize.width
-        ? this.eventDetailInfo.coordinates.x - thisPopupSize.width - 15
-        : this.eventDetailInfo.coordinates.x + 15;
-    let calculateY =
-      this.eventDetailInfo.coordinates.y + thisPopupSize.height >
-      calendarSize.height
-        ? this.eventDetailInfo.coordinates.y - thisPopupSize.height
-        : this.eventDetailInfo.coordinates.y;
-    this.coordinates = {
-      x: calculateX,
-      y: calculateY
-    };
+    this.calculatePosition();
   },
   updated() {
     console.log("updated");
