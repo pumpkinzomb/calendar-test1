@@ -14,6 +14,7 @@
 <script>
 /* eslint-disable */
 export default {
+  name: "EventDetailPopup",
   props: {
     eventDetailInfo: {
       title: String,
@@ -73,7 +74,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang='scss'>
 .Event-Detail-Popup {
   z-index: 2;
   box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.14),
