@@ -271,11 +271,6 @@ export default {
 @import "~@fullcalendar/daygrid/main.css";
 
 .Calendar {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
   margin-top: 1.5rem;
   display: flex;
   padding: 0.5rem;
