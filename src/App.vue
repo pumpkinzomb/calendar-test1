@@ -1,27 +1,27 @@
 <template>
   <div id="app">
-    <Calendar />
+    <div class="gnb">
+      <router-link to="/">logo</router-link>&nbsp;
+      <router-link to="/calendar">c</router-link>
+      <router-link to="/patient">p</router-link>
+    </div>
+    <div class="view">
+      <router-view />
+    </div>
   </div>
 </template>
 
-<script>
-/* eslint-disable */
-import Calendar from "./components/Calendar.vue";
-import "reset-css";
-export default {
-  name: "app",
-  components: {
-    Calendar
-  },
-  methods: {},
-  data() {
-    return {};
-  },
-  mounted() {
-    console.log("rendered");
-  }
-};
-</script>
-
 <style lang='scss'>
+#app {
+  display: flex;
+  font-family: "manrope3";
+  .gnb {
+    width: 80px;
+    height: 100%;
+    flex-shrink: 0;
+    a {
+      display: block;
+    }
+  }
+}
 </style>

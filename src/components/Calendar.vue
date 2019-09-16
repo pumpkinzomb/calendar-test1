@@ -1,23 +1,38 @@
 <template>
   <div class="Calendar">
-    <div class="sort-type">
-      <ul>
-        <li v-for="(patient,index) of eventPatients" :key="index">
-          <input
-            type="checkbox"
-            :id="patient.patientId"
-            :value="patient.patientId"
-            v-model="checkedPatients"
-          />
-          <label :for="patient.patientId">{{patient.patientName}}</label>
-        </li>
-      </ul>
-      <ul :style="{margin:'20px 0'}">
-        <li v-for="(type,index) of eventTypes" :key="index">
-          <input type="checkbox" :id="type" :value="type" v-model="checkedTypes" />
-          <label :for="type">{{type}}</label>
-        </li>
-      </ul>
+    <div class="sort">
+      <div class="sort-patient">
+        <h2>Patient Sorting</h2>
+        <input type="text" placeholder="Search Patient" />
+        <div>
+          <input type="checkbox" id="all_patients" value="all" @click="selectAllPatients" />
+          <label for="all_patients">Select All</label>
+        </div>
+        <ul>
+          <li v-for="(patient,index) of eventPatients" :key="index">
+            <input
+              type="checkbox"
+              :id="patient.patientId"
+              :value="patient.patientId"
+              v-model="checkedPatients"
+            />
+            <label :for="patient.patientId">{{patient.patientName}}</label>
+          </li>
+        </ul>
+      </div>
+      <div class="sort-type">
+        <h2>Type of Event</h2>
+        <div>
+          <input type="checkbox" id="all_patients" value="all" @click="selectAllTypes" />
+          <label for="all_types">Select All</label>
+        </div>
+        <ul :style="{margin:'20px 0'}">
+          <li v-for="(type,index) of eventTypes" :key="index">
+            <input type="checkbox" :id="index" :value="index" v-model="checkedTypes" />
+            <label :for="index">{{type}}</label>
+          </li>
+        </ul>
+      </div>
     </div>
     <FullCalendar
       :plugins="calendarPlugins"
@@ -33,6 +48,7 @@
       :fixedWeekCount="calendarConfig.fixedWeekCount"
       :dayPopoverFormat="calendarConfig.dayPopoverFormat"
       :titleFormat="calendarConfig.titleFormat"
+      :buttonText="calendarConfig.buttonText"
       class="fullCalendar"
       ref="fullCalendar"
     />
@@ -94,8 +110,8 @@ export default {
     sortEventSources(types, patients) {
       let newEventSources = eval("(" + JSON.stringify(this.eventSources) + ")");
       newEventSources = newEventSources.filter(source => {
-        for (let type of types) {
-          if (source.className === `event-${type}`) {
+        for (const type of types) {
+          if (source.className === `event-group${type}`) {
             return source;
           }
         }
@@ -228,9 +244,15 @@ export default {
           patientName: "personB"
         }
       ],
-      eventTypes: ["group1", "group2", "group3", "group4"],
+      eventTypes: [
+        "Video Session",
+        "Co-op Game",
+        "Screen Sharing",
+        "Therapist Live",
+        "General"
+      ],
       checkedPatients: ["aaaaa", "bbbbb"],
-      checkedTypes: ["group1", "group2"]
+      checkedTypes: [1, 2]
     };
   },
   mounted() {
@@ -271,57 +293,65 @@ export default {
 @import "~@fullcalendar/daygrid/main.css";
 
 .Calendar {
-  margin-top: 1.5rem;
   display: flex;
-  padding: 0.5rem;
+
   .sort-type {
-    padding-top: 4rem;
+    width: 240px;
+    flex-shrink: 0;
     ul {
-      width: 200px;
     }
   }
   .fullCalendar {
     position: relative;
-    .fc-today-button {
+    color: $fontColor1;
+    .fc-head {
+      .fc-day-header {
+        padding: 30px 0 15px 0;
+        color: $fontColor3;
+      }
     }
-    .fc-day-header {
-      padding: 1rem 0;
-    }
-    .fc-center {
-      display: flex;
-    }
-    &.fc-unthemed {
-      .fc-head {
-        td {
-          border-bottom: 1px solid rgba(255, 255, 255, 0);
+    .fc-header-toolbar {
+      padding: 20px 0;
+      background: rgba(244, 245, 247, 0.3);
+      border-top: 1px solid $borderColor1;
+      &.fc-toolbar {
+        margin: 0;
+      }
+      .fc-center {
+        display: flex;
+        h2 {
+          margin: 0 21.4px;
+          line-height: 34px;
+          font-size: $fontSize2;
         }
+      }
+    }
+
+    &.fc-unthemed {
+      th,
+      td {
+        border-width: 0.6px;
+        border-color: $borderColor1;
       }
       .fc-popover {
         .fc-header {
           background: white;
         }
       }
+      .fc-disabled-day {
+        background: rgba(255, 255, 255, 0);
+      }
     }
     .fc-day-header {
       position: relative;
-      &::after {
-        /* 일월화수목금토 아래 border를 투명하게했기때문에 생긴 우측 border빈공간을 채우기 위한 것 */
-        content: "";
-        display: block;
-        border-right: 1px solid #dddddd;
-        width: 0;
-        height: 1px;
-        position: absolute;
-        top: 100%;
-        left: 100%;
-      }
     }
     .fc-day-top {
       position: relative;
       .fc-day-number {
         float: left;
+        font-size: $fontSize1;
         position: relative;
-        padding: 0.5rem;
+        padding: 20.5px 0 13.7px 0;
         left: 50%;
         transform: translate(-50%, 0);
       }
@@ -353,12 +383,12 @@ export default {
       }
       &.event-group1 {
         &::before {
-          background: #f1c40f;
+          background: $groupColor1;
         }
       }
       &.event-group2 {
         &::before {
-          background: #e67e22;
+          background: $groupColor2;
         }
       }
       &.event-group3 {
@@ -403,21 +433,37 @@ export default {
       .fc-day-number {
         margin: 0.5rem 0;
         padding: 0;
-        width: 2rem;
-        height: 2rem;
-        line-height: 2rem;
+        width: 50px;
+        height: 50px;
+        line-height: 50px;
         text-align: center;
-        background: #1a73e8;
+        background: $mainColor1;
         color: #ffffff;
         border-radius: 50%;
         box-sizing: border-box;
       }
     }
-    .fc-sat {
-      // color: blue;
-    }
-    .fc-sun {
-      // color: red;
+    .fc-button {
+      padding: 0;
+
+      border-radius: 11px;
+      font-size: $fontSize3;
+      &.fc-prev-button,
+      &.fc-next-button {
+        width: 34px;
+        height: 34px;
+        margin: 0;
+      }
+      &.fc-today-button {
+        width: 67.1px;
+        margin-right: 20.9px;
+        color: $fontColor1;
+      }
+      &.fc-button-primary {
+        background: rgba(255, 255, 255, 0);
+        color: $fontColor1;
+        border-color: $borderColor1;
+      }
     }
 
     .fc-popover.fc-more-popover {
