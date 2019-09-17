@@ -1,39 +1,6 @@
 <template>
   <div class="Calendar">
-    <div class="sort">
-      <div class="sort-patient">
-        <h2>Patient Sorting</h2>
-        <input type="text" placeholder="Search Patient" />
-        <div>
-          <input type="checkbox" id="all_patients" value="all" @click="selectAllPatients" />
-          <label for="all_patients">Select All</label>
-        </div>
-        <ul>
-          <li v-for="(patient,index) of eventPatients" :key="index">
-            <input
-              type="checkbox"
-              :id="patient.patientId"
-              :value="patient.patientId"
-              v-model="checkedPatients"
-            />
-            <label :for="patient.patientId">{{patient.patientName}}</label>
-          </li>
-        </ul>
-      </div>
-      <div class="sort-type">
-        <h2>Type of Event</h2>
-        <div>
-          <input type="checkbox" id="all_patients" value="all" @click="selectAllTypes" />
-          <label for="all_types">Select All</label>
-        </div>
-        <ul :style="{margin:'20px 0'}">
-          <li v-for="(type,index) of eventTypes" :key="index">
-            <input type="checkbox" :id="index" :value="index" v-model="checkedTypes" />
-            <label :for="index">{{type}}</label>
-          </li>
-        </ul>
-      </div>
-    </div>
+    <Sorting :allPatients="allPatients" :eventTypes="eventTypes" />
     <FullCalendar
       :plugins="calendarPlugins"
       defaultView="dayGridMonth"
@@ -63,17 +30,19 @@
 <script>
 /* eslint-disable */
 import FullCalendar from "@fullcalendar/vue";
+import Sorting from "./Calendar_Sorting.vue";
+import EventDetailPopup from "./EventDetailPopup.vue";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import EventDetailPopup from "./EventDetailPopup.vue";
 import CALENDAR_DEFAULT from "@/utils/calendar_default.js";
 
 export default {
   name: "Calendar",
   components: {
     FullCalendar,
-    EventDetailPopup
+    EventDetailPopup,
+    Sorting
   },
   methods: {
     handleEventClick(info) {
@@ -234,7 +203,7 @@ export default {
           className: "event-group2"
         }
       ],
-      eventPatients: [
+      allPatients: [
         {
           patientId: "aaaaa",
           patientName: "personA"
@@ -294,19 +263,14 @@ export default {
 
 .Calendar {
   display: flex;
+  font-size: $fontSize5;
 
-  .sort-type {
-    width: 240px;
-    flex-shrink: 0;
-    ul {
-    }
-  }
   .fullCalendar {
     position: relative;
     color: $fontColor1;
     .fc-head {
       .fc-day-header {
-        padding: 30px 0 15px 0;
+        padding: 15px 0;
         color: $fontColor3;
       }
     }
@@ -322,7 +286,7 @@ export default {
         h2 {
           margin: 0 21.4px;
           line-height: 34px;
-          font-size: $fontSize2;
+          font-size: $fontSize5;
         }
       }
     }
@@ -349,7 +313,6 @@ export default {
       position: relative;
       .fc-day-number {
         float: left;
-        font-size: $fontSize1;
         position: relative;
         padding: 20.5px 0 13.7px 0;
         left: 50%;
@@ -358,9 +321,11 @@ export default {
     }
     .fc-event {
       cursor: pointer;
-      line-height: 0.7rem;
+
+      font-size: $fontSize6;
+      line-height: $fontSize6;
       background: rgba(255, 255, 255, 0);
-      color: #000000;
+      color: $fontColor1;
       padding-left: 1.3rem;
       border: 0;
       &:hover {
@@ -393,17 +358,17 @@ export default {
       }
       &.event-group3 {
         &::before {
-          background: #f39c12;
+          background: $groupColor3;
         }
       }
       &.event-group4 {
         &::before {
-          background: #d35400;
+          background: $groupColor4;
         }
       }
       &.event-group5 {
         &::before {
-          background: #e74c3c;
+          background: $groupColor5;
         }
       }
     }
@@ -447,7 +412,6 @@ export default {
       padding: 0;
 
       border-radius: 11px;
-      font-size: $fontSize3;
       &.fc-prev-button,
       &.fc-next-button {
         width: 34px;
@@ -458,6 +422,7 @@ export default {
         width: 67.1px;
         margin-right: 20.9px;
         color: $fontColor1;
+        font-size: $fontSize6;
       }
       &.fc-button-primary {
         background: rgba(255, 255, 255, 0);
@@ -468,6 +433,32 @@ export default {
 
     .fc-popover.fc-more-popover {
       border-radius: 0.5rem;
+    }
+    .fc-more {
+      position: absolute;
+      transform: translate(50%, 40%);
+      font-size: $fontSize6;
+      color: $fontColor2;
+    }
+    .fc-icon {
+      font-family: "icomoon" !important;
+      font-size: $fontSize5;
+      color: $fontColor2;
+      position: relative;
+      &.fc-icon-chevron-left {
+        top: -2px;
+        left: -1px;
+        &:before {
+          content: "\e93a";
+        }
+      }
+      &.fc-icon-chevron-right {
+        top: -2px;
+        left: 1px;
+        &:before {
+          content: "\e93f";
+        }
+      }
     }
   }
 }

@@ -24,3 +24,15 @@ $groupColor4: #f0b048;
 $groupColor5: #77a6e7;
 
 $borderColor1: #dcdfe6;
+
+input[type="text"] {
+    border: 1px solid $borderColor1;
+    border-radius: 24.5px;
+    font-size: $fontSize7;
+    line-height: 24px;
+    width: 100%;
+
+    &::placeholder {
+        color: $fontColor3;
+    }
+}

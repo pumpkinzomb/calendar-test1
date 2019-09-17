@@ -9,10 +9,9 @@ module.exports = {
         prependData: `
           @import "@/scss/manrope.scss";
           @import "@/scss/default_theme.scss";
+          @import "@/scss/custom_icons.scss";
         `
       },
     }
   }
 };
-// 
-//           @import "@/scss/custom_icons.scss";
