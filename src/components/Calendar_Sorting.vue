@@ -36,6 +36,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 export default {
   name: "Sorting",
   props: {
@@ -51,6 +52,7 @@ export default {
 <style lang="scss">
 .Sorting {
   width: 240px;
+  height: 100%;
   flex-shrink: 0;
 }
 </style>

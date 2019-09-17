@@ -25,6 +25,112 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-ic_group {
+    font-size: $fontSize2;
+
+    .path1:before {
+        content: "\e992";
+    }
+
+    .path2:before {
+        content: "\e993";
+        margin-left: -1em;
+    }
+
+    .path3:before {
+        content: "\e994";
+        margin-left: -1em;
+    }
+
+    .path4:before {
+        content: "\e995";
+        margin-left: -1em;
+    }
+}
+
+.icon-ic_calendar {
+    font-size: $fontSize2;
+
+    .path1:before {
+        content: "\e923";
+    }
+
+    .path2:before {
+        content: "\e924";
+        margin-left: -1em;
+    }
+
+    .path3:before {
+        content: "\e925";
+        margin-left: -1em;
+    }
+
+    .path4:before {
+        content: "\e926";
+        margin-left: -1em;
+    }
+
+    .path5:before {
+        content: "\e927";
+        margin-left: -1em;
+    }
+}
+
+.icon-ic_date {
+    font-size: $fontSize2;
+
+    .path1:before {
+        content: "\e946";
+    }
+
+    .path2:before {
+        content: "\e947";
+        margin-left: -1em;
+    }
+
+    .path3:before {
+        content: "\e948";
+        margin-left: -1em;
+    }
+
+    .path4:before {
+        content: "\e949";
+        margin-left: -1em;
+    }
+
+    .path5:before {
+        content: "\e94a";
+        margin-left: -1em;
+    }
+
+    .path6:before {
+        content: "\e94b";
+        margin-left: -1em;
+    }
+
+    .path7:before {
+        content: "\e94c";
+        margin-left: -1em;
+    }
+
+    .path8:before {
+        content: "\e94d";
+        margin-left: -1em;
+    }
+
+    .path9:before {
+        content: "\e94e";
+        margin-left: -1em;
+    }
+
+    .path10:before {
+        content: "\e94f";
+        margin-left: -1em;
+    }
+}
+
+
+
 .icon-ic_achievement .path1:before {
     content: "\e900";
     color: rgb(255, 255, 255);
@@ -229,42 +335,6 @@
     color: rgb(96, 98, 102);
 }
 
-.icon-ic_calendar .path1:before {
-    content: "\e922";
-    color: rgb(255, 255, 255);
-    opacity: 0.0100;
-}
-
-.icon-ic_calendar .path2:before {
-    content: "\e923";
-    margin-left: -1em;
-    color: rgb(96, 98, 102);
-}
-
-.icon-ic_calendar .path3:before {
-    content: "\e924";
-    margin-left: -1em;
-    color: rgb(96, 98, 102);
-}
-
-.icon-ic_calendar .path4:before {
-    content: "\e925";
-    margin-left: -1em;
-    color: rgb(96, 98, 102);
-}
-
-.icon-ic_calendar .path5:before {
-    content: "\e926";
-    margin-left: -1em;
-    color: rgb(96, 98, 102);
-}
-
-.icon-ic_calendar .path6:before {
-    content: "\e927";
-    margin-left: -1em;
-    color: rgb(96, 98, 102);
-}
-
 .icon-ic_change .path1:before {
     content: "\e928";
     color: rgb(255, 255, 255);
@@ -439,71 +509,6 @@
     color: rgb(96, 98, 102);
 }
 
-.icon-ic_date .path1:before {
-    content: "\e945";
-    color: rgb(255, 255, 255);
-    opacity: 0.0100;
-}
-
-.icon-ic_date .path2:before {
-    content: "\e946";
-    margin-left: -1em;
-    color: rgb(96, 98, 102);
-}
-
-.icon-ic_date .path3:before {
-    content: "\e947";
-    margin-left: -1em;
-    color: rgb(96, 98, 102);
-}
-
-.icon-ic_date .path4:before {
-    content: "\e948";
-    margin-left: -1em;
-    color: rgb(96, 98, 102);
-}
-
-.icon-ic_date .path5:before {
-    content: "\e949";
-    margin-left: -1em;
-    color: rgb(96, 98, 102);
-}
-
-.icon-ic_date .path6:before {
-    content: "\e94a";
-    margin-left: -1em;
-    color: rgb(96, 98, 102);
-}
-
-.icon-ic_date .path7:before {
-    content: "\e94b";
-    margin-left: -1em;
-    color: rgb(96, 98, 102);
-}
-
-.icon-ic_date .path8:before {
-    content: "\e94c";
-    margin-left: -1em;
-    color: rgb(96, 98, 102);
-}
-
-.icon-ic_date .path9:before {
-    content: "\e94d";
-    margin-left: -1em;
-    color: rgb(96, 98, 102);
-}
-
-.icon-ic_date .path10:before {
-    content: "\e94e";
-    margin-left: -1em;
-    color: rgb(96, 98, 102);
-}
-
-.icon-ic_date .path11:before {
-    content: "\e94f";
-    margin-left: -1em;
-    color: rgb(96, 98, 102);
-}
 
 .icon-ic_delete .path1:before {
     content: "\e950";
