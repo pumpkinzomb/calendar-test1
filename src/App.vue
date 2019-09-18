@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div class="gnb">
+    <div class="gnb" ref="left_view">
       <router-link to="/" class="nav-home">
         <img :src="logo" alt="neofect logo" />
       </router-link>&nbsp;
@@ -27,8 +27,12 @@
         </span>
       </router-link>
     </div>
-    <div class="view">
-      <router-view />
+    <div ref="right_view">
+      <div class="top">
+        <span>알림</span>
+        <span>회원</span>
+      </div>
+      <router-view class="view" />
     </div>
   </div>
 </template>
@@ -42,6 +46,12 @@ export default {
     logo() {
       return require("@/assets/svgs/symbol-neofect.svg");
     }
+  },
+  mounted() {
+    console.log(this.$refs.right_view.clientHeight);
+  },
+  updated() {
+    console.log(this.$refs.right_view.clientHeight);
   }
 };
 </script>
@@ -49,10 +59,8 @@ export default {
 #app {
   display: flex;
   font-family: "manrope3";
-  height: 100%;
   .gnb {
     width: 80px;
-    height: 100%;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
@@ -85,6 +93,11 @@ export default {
         margin-top: 40px;
       }
     }
+  }
+  .top {
+    width: 100%;
+    border-bottom: 1px solid $borderColor1;
+    height: 70px;
   }
 }
 </style>

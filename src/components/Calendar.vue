@@ -277,7 +277,6 @@ export default {
     .fc-header-toolbar {
       padding: 20px 0;
       background: rgba(244, 245, 247, 0.3);
-      border-top: 1px solid $borderColor1;
       &.fc-toolbar {
         margin: 0;
       }
@@ -296,6 +295,12 @@ export default {
       td {
         border-width: 0.6px;
         border-color: $borderColor1;
+        &:first-of-type {
+          border-left: 0 none;
+        }
+        &:last-of-type {
+          border-right: 0 none;
+        }
       }
       .fc-popover {
         .fc-header {
