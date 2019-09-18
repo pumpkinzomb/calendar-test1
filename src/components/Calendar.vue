@@ -1,6 +1,6 @@
 <template>
   <div class="Calendar">
-    <Sorting :allPatients="allPatients" :eventTypes="eventTypes" />
+    <Sorting :allPatients="allPatients" :eventTypes="eventTypes" ref="sorting" />
     <FullCalendar
       :plugins="calendarPlugins"
       defaultView="dayGridMonth"
@@ -219,9 +219,7 @@ export default {
         "Screen Sharing",
         "Therapist Live",
         "General"
-      ],
-      checkedPatients: ["aaaaa", "bbbbb"],
-      checkedTypes: [1, 2]
+      ]
     };
   },
   mounted() {
@@ -230,30 +228,12 @@ export default {
       height: this.$refs.fullCalendar.$el.offsetHeight
     };
     const sortEventSources = this.sortEventSources(
-      this.checkedTypes,
-      this.checkedPatients
+      this.$refs.sorting.checkedTypes,
+      this.$refs.sorting.checkedPatients
     );
     this.setEventSources(sortEventSources);
-    // console.log("rendered");
   },
-  updated() {
-    // console.log("updated");
-  },
-  watch: {
-    checkedPatients: function(newVal, oldVal) {
-      this.handleDetailPopupClose();
-      const sortEventSources = this.sortEventSources(this.checkedTypes, newVal);
-      this.setEventSources(sortEventSources);
-    },
-    checkedTypes: function(newVal, oldVal) {
-      this.handleDetailPopupClose();
-      const sortEventSources = this.sortEventSources(
-        newVal,
-        this.checkedPatients
-      );
-      this.setEventSources(sortEventSources);
-    }
-  }
+  updated() {}
 };
 </script>
 

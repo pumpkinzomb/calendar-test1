@@ -11,7 +11,7 @@ module.exports = {
           @import "@/scss/default_theme.scss";
           @import "@/scss/custom_icons.scss";
         `
-      },
+      }
     }
   }
 };

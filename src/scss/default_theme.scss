@@ -27,7 +27,6 @@ $borderColor1: #dcdfe6;
 
 html,
 body {
-
     input[type="text"] {
         border: 1px solid $borderColor1;
         border-radius: 24.5px;
@@ -44,7 +43,7 @@ body {
     }
 
     input[type="checkbox"] {
-        visibility: hidden;
+        display: none;
 
         &+label {
             &::before {
@@ -68,6 +67,31 @@ body {
                 color: #ffffff;
                 border-color: $mainColor1;
                 background: $mainColor1;
+            }
+        }
+    }
+
+    button {
+        border: 0 none;
+        background: none;
+        cursor: pointer;
+        font-family: "manrope3";
+        padding: 0;
+
+        &.all-checkbox {
+            &::before {
+                margin: 0;
+                font-family: 'icomoon' !important;
+                content: '\e933';
+                display: inline-block;
+                border: 2px solid $borderColor1;
+                font-size: 20px;
+                width: 24px;
+                height: 24px;
+                border-radius: 2px;
+                box-sizing: border-box;
+                margin-right: 16px;
+                color: rgba(255, 255, 255, 0);
             }
         }
     }

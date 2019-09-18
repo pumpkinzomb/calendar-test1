@@ -10,8 +10,7 @@
         <input type="text" placeholder="Search Patient" />
       </div>
       <div>
-        <input type="checkbox" id="all_patients" value="all" @click="selectAllPatients" />
-        <label for="all_patients">Select All</label>
+        <button :class="checkAllPatients">Select All</button>
       </div>
       <ul>
         <li v-for="(patient,index) of allPatients" :key="index">
@@ -28,8 +27,7 @@
     <div class="sort-type">
       <h2>Type of Event</h2>
       <div>
-        <input type="checkbox" id="all_types" value="all" @click="selectAllTypes" />
-        <label for="all_types">Select All</label>
+        <button :class="checkAllTypes" @click="handleAllTypes">Select All</button>
       </div>
       <ul>
         <li v-for="(type,index) of eventTypes" :key="index">
@@ -49,9 +47,56 @@ export default {
     allPatients: Array,
     eventTypes: Array
   },
-  mounted() {
-    console.log(this.allPatients, this.eventTypes);
-  }
+  data() {
+    return {
+      checkedPatients: ["aaaaa", "bbbbb"],
+      checkedTypes: [1, 2]
+    };
+  },
+  methods: {
+    handleAllTypes: function() {}
+  },
+  watch: {
+    checkedPatients: function(newVal, oldVal) {
+      this.$parent.handleDetailPopupClose();
+      const sortEventSources = this.$parent.sortEventSources(
+        this.checkedTypes,
+        newVal
+      );
+      this.$parent.setEventSources(sortEventSources);
+    },
+    checkedTypes: function(newVal, oldVal) {
+      this.$parent.handleDetailPopupClose();
+      const sortEventSources = this.$parent.sortEventSources(
+        newVal,
+        this.checkedPatients
+      );
+      this.$parent.setEventSources(sortEventSources);
+    }
+  },
+  computed: {
+    checkAllTypes: function() {
+      const allCounts = this.eventTypes.length;
+      const checkedCounts = this.checkedTypes.length;
+      // console.log(allCounts, this.checkedTypes.length);
+      return checkedCounts === allCounts
+        ? "all all-checkbox"
+        : checkedCounts > 0
+        ? "checked all-checkbox"
+        : "all-checkbox";
+    },
+    checkAllPatients: function() {
+      const allCounts = this.allPatients.length;
+      const checkedCounts = this.checkedPatients.length;
+      // console.log(allCounts, this.checkedTypes.length);
+      return checkedCounts === allCounts
+        ? "all all-checkbox"
+        : checkedCounts > 0
+        ? "checked all-checkbox"
+        : "all-checkbox";
+    }
+  },
+  mounted() {}
 };
 </script>
 
@@ -70,10 +115,26 @@ export default {
   li {
     & + li {
       margin-top: 16px;
-      line-height: 24px;
+    }
+  }
+  .all-checkbox {
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    &.all {
+      &::before {
+        background: red;
+      }
+    }
+    &.checked {
+      &::before {
+        background: blue;
+      }
     }
   }
   label {
+    display: flex;
+    align-items: center;
     font-size: $fontSize6;
     cursor: pointer;
   }

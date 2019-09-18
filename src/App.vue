@@ -37,6 +37,8 @@
   </div>
 </template>
 <script>
+/* eslint-disable */
+
 export default {
   name: "app",
   data() {
@@ -46,12 +48,6 @@ export default {
     logo() {
       return require("@/assets/svgs/symbol-neofect.svg");
     }
-  },
-  mounted() {
-    console.log(this.$refs.right_view.clientHeight);
-  },
-  updated() {
-    console.log(this.$refs.right_view.clientHeight);
   }
 };
 </script>
