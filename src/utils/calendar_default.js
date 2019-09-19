@@ -19,7 +19,7 @@ const CALENDAR_DEFAULT = {
     //더보기 팝업 타이틀날짜표기
     const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     const title = new Date(dateData.date.marker);
-    return `${title.getDate()} (${days[title.getDay()]})`;
+    return `${title.getDate()} ${days[title.getDay()]}`;
   },
   buttonText:{
     today:    'Today',

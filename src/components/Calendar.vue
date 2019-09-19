@@ -146,7 +146,7 @@ export default {
               id: "a2",
               patient: {
                 patientId: "bbbbb",
-                patientName: "personB"
+                patientName: "  personB"
               },
               title: "eventA personB",
               start: "2019-09-05T12:30:00",
@@ -211,6 +211,30 @@ export default {
         {
           patientId: "bbbbb",
           patientName: "personB"
+        },
+        {
+          patientId: "ccccc",
+          patientName: "personC"
+        },
+        {
+          patientId: "ddddd",
+          patientName: "personD"
+        },
+        {
+          patientId: "eeeee",
+          patientName: "personE"
+        },
+        {
+          patientId: "fffff",
+          patientName: "personF"
+        },
+        {
+          patientId: "ggggg",
+          patientName: "nabi"
+        },
+        {
+          patientId: "hhhhh",
+          patientName: "cat"
         }
       ],
       eventTypes: [
@@ -265,7 +289,7 @@ export default {
         h2 {
           margin: 0 21.4px;
           line-height: 34px;
-          font-size: $fontSize5;
+          font-size: $fontSize3;
         }
       }
     }
@@ -304,6 +328,9 @@ export default {
         transform: translate(-50%, 0);
       }
     }
+    .fc-event-container {
+      padding: 0 16px;
+    }
     .fc-event {
       cursor: pointer;
 
@@ -311,7 +338,7 @@ export default {
       line-height: $fontSize6;
       background: rgba(255, 255, 255, 0);
       color: $fontColor1;
-      padding-left: 1.3rem;
+      padding-left: 15px;
       border: 0;
       &:hover {
         background: rgba(90, 90, 90, 0.1);
@@ -322,12 +349,12 @@ export default {
       &::before {
         content: "";
         display: block;
-        width: 0.5rem;
-        height: 0.5rem;
+        width: 12px;
+        height: 12px;
         background: rgb(167, 155, 142);
         position: absolute;
         top: 50%;
-        left: 0.5rem;
+        left: 0;
         transform: translate(0, -45%);
         border-radius: 50%;
       }
@@ -365,17 +392,30 @@ export default {
       .fc-header {
         .fc-title {
           margin: auto;
-          font-weight: bold;
-          font-size: 1.5rem;
-          padding: 0.8rem;
+          font-weight: 500;
+          font-size: $fontSize3;
+          padding: 16px 0;
+          color: $fontColor2;
         }
         .fc-close {
           position: absolute;
-          right: 0.8rem;
+          top: 16px;
+          right: 16px;
+        }
+        .fc-icon-x {
+          font-size: $fontSize2;
+          color: $fontColor1;
+          &::before {
+            content: "\e951";
+          }
+          &::after {
+            content: "\e952";
+            margin-left: -1em;
+          }
         }
       }
       .fc-event-container {
-        padding: 0.5rem;
+        padding: 0 16px 24px 16px;
       }
     }
     .fc-today {

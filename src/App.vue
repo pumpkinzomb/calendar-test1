@@ -29,8 +29,26 @@
     </div>
     <div ref="right_view">
       <div class="top">
-        <span>알림</span>
-        <span>회원</span>
+        <router-link to="/" class="nav-button">
+          <span class="icon-ic_setting">
+            <span class="path1"></span>
+            <span class="path2"></span>
+          </span>
+        </router-link>
+        <router-link to="/" class="nav-button">
+          <span class="icon-ic_bell">
+            <span class="path1"></span>
+            <span class="path2"></span>
+            <span class="path3"></span>
+          </span>
+        </router-link>
+        <router-link to="/" class="nav-button">
+          <span class="icon-ic_user">
+            <span class="path1"></span>
+            <span class="path2"></span>
+            <span class="path3"></span>
+          </span>
+        </router-link>
       </div>
       <router-view class="view" />
     </div>
@@ -55,6 +73,26 @@ export default {
 #app {
   display: flex;
   font-family: "manrope3";
+  .nav-button {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: $fontColor2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &.on {
+      background: $mainColor1;
+      color: #ffffff;
+    }
+    &.nav-calendar {
+      margin-top: 60px;
+    }
+    &.nav-patients {
+      margin-top: 40px;
+    }
+  }
   .gnb {
     width: 80px;
     flex-shrink: 0;
@@ -68,32 +106,30 @@ export default {
       width: 40px;
       text-align: center;
     }
-    .nav-button {
-      display: block;
-      width: 40px;
-      height: 40px;
-      border-radius: 8px;
-      text-decoration: none;
-      color: $fontColor2;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      &.on {
-        background: $mainColor1;
-        color: #ffffff;
-      }
-      &.nav-calendar {
-        margin-top: 60px;
-      }
-      &.nav-patients {
-        margin-top: 40px;
-      }
-    }
   }
   .top {
     width: 100%;
     border-bottom: 1px solid $borderColor1;
     height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 20px;
+    box-sizing: border-box;
+    .nav-button {
+      & + .nav-button {
+        margin-left: 10px;
+      }
+    }
+    .icon-ic_setting {
+      color: $fontColor2;
+    }
+    .icon-ic_bell {
+      color: $fontColor2;
+    }
+    .icon-ic_user {
+      color: $fontColor2;
+    }
   }
 }
 </style>
