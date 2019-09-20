@@ -1,24 +1,33 @@
 <template>
   <div class="Calendar">
-    <Sorting :allPatients="allPatients" :eventTypes="eventTypes" ref="sorting" />
-    <FullCalendar
-      :plugins="calendarPlugins"
-      defaultView="dayGridMonth"
-      @eventClick="handleEventClick"
-      @select="handleSelect"
-      @datesRender="handleDatesRender"
-      @windowResize="handleWindowResize"
-      :header="calendarConfig.header"
-      :eventLimit="calendarConfig.eventLimit"
-      :selectable="calendarConfig.selectable"
-      :showNonCurrentDates="calendarConfig.showNonCurrentDates"
-      :fixedWeekCount="calendarConfig.fixedWeekCount"
-      :dayPopoverFormat="calendarConfig.dayPopoverFormat"
-      :titleFormat="calendarConfig.titleFormat"
-      :buttonText="calendarConfig.buttonText"
-      class="fullCalendar"
-      ref="fullCalendar"
-    />
+    <Sorting :allPatients="allPatients" :eventTypes="eventTypes" ref="sorting" v-if="sortingMenu" />
+    <div class="calendar-area">
+      <button type="button" class="sorting-btn" @click="toggleSortingMenu">
+        <span class="icon-ic_delete">
+          <span class="path1"></span>
+          <span class="path2"></span>
+        </span>
+      </button>
+      <FullCalendar
+        :plugins="calendarPlugins"
+        defaultView="dayGridMonth"
+        @eventClick="handleEventClick"
+        @select="handleSelect"
+        @datesRender="handleDatesRender"
+        @windowResize="handleWindowResize"
+        :header="calendarConfig.header"
+        :eventLimit="calendarConfig.eventLimit"
+        :selectable="calendarConfig.selectable"
+        :showNonCurrentDates="calendarConfig.showNonCurrentDates"
+        :fixedWeekCount="calendarConfig.fixedWeekCount"
+        :dayPopoverFormat="calendarConfig.dayPopoverFormat"
+        :titleFormat="calendarConfig.titleFormat"
+        :buttonText="calendarConfig.buttonText"
+        :height="calendarConfig.height"
+        class="fullCalendar"
+        ref="fullCalendar"
+      />
+    </div>
     <EventDetailPopup
       v-if="event_detail_popup.view"
       :eventDetailInfo="event_detail_popup"
@@ -46,7 +55,7 @@ export default {
   },
   methods: {
     handleEventClick(info) {
-      // console.log(info.event);
+      // console.log(info);
       const testInfo = {
         view: true,
         title: info.event.title,
@@ -68,8 +77,8 @@ export default {
     handleWindowResize(info) {
       //캘린더가 리사이즈될때마다 호출됨
       this.calendarSize = {
-        width: info.calendar.el.offsetWidth,
-        height: info.calendar.el.offsetHeight
+        width: this.$el.offsetWidth,
+        height: this.$el.offsetHeight
       };
       this.handleDetailPopupClose();
     },
@@ -113,6 +122,9 @@ export default {
     handleDatesRender(info) {
       this.handleDetailPopupClose();
       //캘린더가 event를 렌더링할때마다 호출됨
+    },
+    toggleSortingMenu() {
+      this.sortingMenu = !this.sortingMenu;
     }
   },
   data() {
@@ -271,6 +283,44 @@ export default {
             // etc...
           ],
           className: "event-group6"
+        },
+        {
+          events: [
+            {
+              id: "a10",
+              patients: [
+                {
+                  patientId: "ggggg",
+                  patientName: "nabi"
+                },
+                {
+                  patientId: "hhhhh",
+                  patientName: "cat"
+                }
+              ],
+              title: "eventB personA",
+              start: "2019-09-15T12:30:00",
+              end: "2019-09-15T13:30:00"
+            },
+            {
+              id: "a11",
+              patients: [
+                {
+                  patientId: "aaaaa",
+                  patientName: "personA"
+                },
+                {
+                  patientId: "hhhhh",
+                  patientName: "cat"
+                }
+              ],
+              title: "personA, cat",
+              start: "2019-09-29T12:30:00",
+              end: "2019-09-29T13:30:00"
+            }
+            // etc...
+          ],
+          className: "event-group4"
         }
       ],
       allPatients: [
@@ -314,13 +364,15 @@ export default {
         "Therapist Live",
         "General",
         "Video Session Request"
-      ]
+      ],
+      sortingMenu: true
     };
   },
   mounted() {
+    console.log(this);
     this.calendarSize = {
-      width: this.$refs.fullCalendar.$el.offsetWidth,
-      height: this.$refs.fullCalendar.$el.offsetHeight
+      width: this.$el.offsetWidth,
+      height: this.$el.offsetHeight
     };
     const sortEventSources = this.sortEventSources(
       this.$refs.sorting.checkedTypes,
@@ -339,221 +391,229 @@ export default {
 .Calendar {
   display: flex;
   font-size: $fontSize5;
-
-  .fullCalendar {
+  .calendar-area {
     position: relative;
-    color: $fontColor1;
-    .fc-head {
-      .fc-day-header {
-        padding: 15px 0;
-        color: $fontColor3;
-      }
+    .sorting-btn {
+      position: absolute;
+      top: 25px;
+      left: 16px;
+      z-index: 1;
     }
-    .fc-header-toolbar {
-      padding: 20px 0;
-      background: rgba(244, 245, 247, 0.3);
-      &.fc-toolbar {
-        margin: 0;
-      }
-      .fc-center {
-        display: flex;
-        h2 {
-          margin: 0 21.4px;
-          line-height: 34px;
-          font-size: $fontSize3;
-        }
-      }
-    }
-
-    &.fc-unthemed {
-      th,
-      td {
-        border-width: 0.6px;
-        border-color: $borderColor1;
-        &:first-of-type {
-          border-left: 0 none;
-        }
-        &:last-of-type {
-          border-right: 0 none;
-        }
-      }
-      .fc-popover {
-        .fc-header {
-          background: white;
-        }
-      }
-      .fc-disabled-day {
-        background: rgba(255, 255, 255, 0);
-      }
-    }
-    .fc-day-header {
+    .fullCalendar {
       position: relative;
-    }
-    .fc-day-top {
-      position: relative;
-      .fc-day-number {
-        float: left;
-        position: relative;
-        padding: 20.5px 0 13.7px 0;
-        left: 50%;
-        transform: translate(-50%, 0);
-      }
-    }
-    .fc-event-container {
-      padding: 0 16px;
-    }
-    .fc-event {
-      cursor: pointer;
-
-      font-size: $fontSize6;
-      line-height: $fontSize6;
-      background: rgba(255, 255, 255, 0);
       color: $fontColor1;
-      padding-left: 15px;
-      border: 0;
-      &:hover {
-        background: rgba(90, 90, 90, 0.1);
-      }
-      .fc-content {
-        padding: 0.3rem;
-      }
-      &::before {
-        content: "";
-        display: block;
-        width: 12px;
-        height: 12px;
-        background: rgb(167, 155, 142);
-        position: absolute;
-        top: 50%;
-        left: 0;
-        transform: translate(0, -45%);
-        border-radius: 50%;
-      }
-      &.event-group1 {
-        &::before {
-          background: $groupColor1;
+      .fc-head {
+        .fc-day-header {
+          padding: 15px 0;
+          color: $fontColor3;
         }
       }
-      &.event-group2 {
-        &::before {
-          background: $groupColor2;
+      .fc-header-toolbar {
+        padding: 20px 0;
+        background: rgba(244, 245, 247, 0.3);
+        &.fc-toolbar {
+          margin: 0;
         }
-      }
-      &.event-group3 {
-        &::before {
-          background: $groupColor3;
-        }
-      }
-      &.event-group4 {
-        &::before {
-          background: $groupColor4;
-        }
-      }
-      &.event-group5 {
-        &::before {
-          background: $groupColor5;
-        }
-      }
-    }
-    .fc-more-popover {
-      width: 260px;
-      box-shadow: 0 0 40px 0 rgba(0, 0, 0, 0.2);
-      overflow: hidden;
-      border: none;
-      box-sizing: border-box;
-      .fc-header {
-        .fc-title {
-          margin: auto;
-          font-weight: 500;
-          font-size: $fontSize3;
-          padding: 16px 0;
-          color: $fontColor2;
-        }
-        .fc-close {
-          position: absolute;
-          top: 16px;
-          right: 16px;
-        }
-        .fc-icon-x {
-          font-size: $fontSize2;
-          color: $fontColor1;
-          &::before {
-            content: "\e951";
+        .fc-center {
+          display: flex;
+          h2 {
+            margin: 0 21.4px;
+            line-height: 34px;
+            font-size: $fontSize3;
           }
-          &::after {
-            content: "\e952";
-            margin-left: -1em;
+        }
+      }
+
+      &.fc-unthemed {
+        th,
+        td {
+          border-width: 0.6px;
+          border-color: $borderColor1;
+          &:first-of-type {
+            border-left: 0 none;
           }
+          &:last-of-type {
+            border-right: 0 none;
+          }
+        }
+        .fc-popover {
+          .fc-header {
+            background: white;
+          }
+        }
+        .fc-disabled-day {
+          background: rgba(255, 255, 255, 0);
+        }
+      }
+      .fc-day-header {
+        position: relative;
+      }
+      .fc-day-top {
+        position: relative;
+        .fc-day-number {
+          float: left;
+          position: relative;
+          padding: 20.5px 0 13.7px 0;
+          left: 50%;
+          transform: translate(-50%, 0);
         }
       }
       .fc-event-container {
-        padding: 0 16px 24px 16px;
+        padding: 0 16px;
       }
-    }
-    .fc-today {
-      background: rgba(255, 255, 255, 0);
-      .fc-day-number {
-        margin: 0.5rem 0;
-        padding: 0;
-        width: 50px;
-        height: 50px;
-        line-height: 50px;
-        text-align: center;
-        background: $mainColor1;
-        color: #ffffff;
-        border-radius: 50%;
-        box-sizing: border-box;
-      }
-    }
-    .fc-button {
-      padding: 0;
+      .fc-event {
+        cursor: pointer;
 
-      border-radius: 11px;
-      &.fc-prev-button,
-      &.fc-next-button {
-        width: 34px;
-        height: 34px;
-        margin: 0;
-      }
-      &.fc-today-button {
-        width: 67.1px;
-        margin-right: 20.9px;
-        color: $fontColor1;
         font-size: $fontSize6;
-      }
-      &.fc-button-primary {
+        line-height: $fontSize6;
         background: rgba(255, 255, 255, 0);
         color: $fontColor1;
-        border-color: $borderColor1;
-      }
-    }
-
-    .fc-popover.fc-more-popover {
-      border-radius: 0.5rem;
-    }
-    .fc-more {
-      position: absolute;
-      transform: translate(50%, 40%);
-      font-size: $fontSize6;
-      color: $fontColor2;
-    }
-    .fc-icon {
-      font-family: "icomoon" !important;
-      font-size: $fontSize5;
-      color: $fontColor2;
-      position: relative;
-      &.fc-icon-chevron-left {
-        top: -2px;
-        left: -1px;
-        &:before {
-          content: "\e93a";
+        padding-left: 15px;
+        border: 0;
+        &:hover {
+          background: rgba(90, 90, 90, 0.1);
+        }
+        .fc-content {
+          padding: 0.3rem;
+        }
+        &::before {
+          content: "";
+          display: block;
+          width: 12px;
+          height: 12px;
+          background: rgb(167, 155, 142);
+          position: absolute;
+          top: 50%;
+          left: 0;
+          transform: translate(0, -45%);
+          border-radius: 50%;
+        }
+        &.event-group1 {
+          &::before {
+            background: $groupColor1;
+          }
+        }
+        &.event-group2 {
+          &::before {
+            background: $groupColor2;
+          }
+        }
+        &.event-group3 {
+          &::before {
+            background: $groupColor3;
+          }
+        }
+        &.event-group4 {
+          &::before {
+            background: $groupColor4;
+          }
+        }
+        &.event-group5 {
+          &::before {
+            background: $groupColor5;
+          }
         }
       }
-      &.fc-icon-chevron-right {
-        top: -2px;
-        left: 1px;
-        &:before {
-          content: "\e93f";
+      .fc-more-popover {
+        width: 260px;
+        box-shadow: 0 0 40px 0 rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        border: none;
+        box-sizing: border-box;
+        .fc-header {
+          .fc-title {
+            margin: auto;
+            font-weight: 500;
+            font-size: $fontSize3;
+            padding: 16px 0;
+            color: $fontColor2;
+          }
+          .fc-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+          }
+          .fc-icon-x {
+            font-size: $fontSize2;
+            color: $fontColor1;
+            &::before {
+              content: "\e951";
+            }
+            &::after {
+              content: "\e952";
+              margin-left: -1em;
+            }
+          }
+        }
+        .fc-event-container {
+          padding: 0 16px 24px 16px;
+        }
+      }
+      .fc-today {
+        background: rgba(255, 255, 255, 0);
+        .fc-day-number {
+          margin: 0.5rem 0;
+          padding: 0;
+          width: 50px;
+          height: 50px;
+          line-height: 50px;
+          text-align: center;
+          background: $mainColor1;
+          color: #ffffff;
+          border-radius: 50%;
+          box-sizing: border-box;
+        }
+      }
+      .fc-button {
+        padding: 0;
+
+        border-radius: 11px;
+        &.fc-prev-button,
+        &.fc-next-button {
+          width: 34px;
+          height: 34px;
+          margin: 0;
+        }
+        &.fc-today-button {
+          width: 67.1px;
+          margin-right: 20.9px;
+          color: $fontColor1;
+          font-size: $fontSize6;
+        }
+        &.fc-button-primary {
+          background: rgba(255, 255, 255, 0);
+          color: $fontColor1;
+          border-color: $borderColor1;
+        }
+      }
+
+      .fc-popover.fc-more-popover {
+        border-radius: 0.5rem;
+      }
+      .fc-more {
+        position: absolute;
+        transform: translate(50%, 40%);
+        font-size: $fontSize6;
+        color: $fontColor2;
+      }
+      .fc-icon {
+        font-family: "icomoon" !important;
+        font-size: $fontSize5;
+        color: $fontColor2;
+        position: relative;
+        &.fc-icon-chevron-left {
+          top: -2px;
+          left: -1px;
+          &:before {
+            content: "\e93a";
+          }
+        }
+        &.fc-icon-chevron-right {
+          top: -2px;
+          left: 1px;
+          &:before {
+            content: "\e93f";
+          }
         }
       }
     }

@@ -7,7 +7,20 @@ const CALENDAR_DEFAULT = {
   },
   titleFormat: function(dateData) {
     //캘린더 타이틀날짜표기
-    const monthNames = ["January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December"];
+    const monthNames = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ];
     const dateInfo = new Date(dateData.date.marker);
     return `${monthNames[dateInfo.getMonth()]} ${dateInfo.getFullYear()}`;
   },
@@ -21,13 +34,14 @@ const CALENDAR_DEFAULT = {
     const title = new Date(dateData.date.marker);
     return `${title.getDate()} ${days[title.getDay()]}`;
   },
-  buttonText:{
-    today:    'Today',
-    month:    'month',
-    week:     'week',
-    day:      'day',
-    list:     'list'
-  }
+  buttonText: {
+    today: "Today",
+    month: "month",
+    week: "week",
+    day: "day",
+    list: "list"
+  },
+  height: 852
 };
 
 export default CALENDAR_DEFAULT;

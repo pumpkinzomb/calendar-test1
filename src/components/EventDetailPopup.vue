@@ -118,15 +118,16 @@ export default {
     },
     calculatePosition() {
       let calendarSize = this.$parent.calendarSize;
+      console.log(calendarSize);
       let thisPopupSize = {
         width: this.$el.offsetWidth,
         height: this.$el.offsetHeight
       };
       let calculateX =
-        this.eventDetailInfo.coordinates.x + 15 + thisPopupSize.width >
+        this.eventDetailInfo.coordinates.x + thisPopupSize.width >
         calendarSize.width
-          ? this.eventDetailInfo.coordinates.x - thisPopupSize.width - 15
-          : this.eventDetailInfo.coordinates.x + 15;
+          ? this.eventDetailInfo.coordinates.x - thisPopupSize.width
+          : this.eventDetailInfo.coordinates.x;
       let calculateY =
         this.eventDetailInfo.coordinates.y + thisPopupSize.height >
         calendarSize.height
@@ -175,14 +176,14 @@ export default {
   },
   mounted() {
     this.calculatePosition();
-    console.log("mounted");
+    // console.log("mounted");
   },
   beforeUpdate() {
     this.calculatePosition();
     this.convertTimeString();
   },
   updated() {
-    console.log("updated");
+    // console.log("updated");
   }
 };
 </script>

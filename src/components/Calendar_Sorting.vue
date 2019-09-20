@@ -63,17 +63,23 @@ export default {
   methods: {
     handleAllTypes: function() {
       let newChecked = [];
-      if (this.checkedTypes.length === 0) {
+      if (
+        this.checkedTypes.length === 0 ||
+        this.checkedTypes.length !== this.eventTypes.length
+      ) {
         this.eventTypes.forEach((type, index) => {
-          newChecked.push(index);
+          newChecked.push(index + 1);
         });
       }
       this.checkedTypes = newChecked;
     },
     handleAllPatients: function() {
       let newChecked = [];
-      if (this.checkedPatients.length === 0) {
-        this.allPatients.forEach((patient, index) => {
+      if (
+        this.checkedPatients.length === 0 ||
+        this.checkedPatients.length !== this.searchedPatients.length
+      ) {
+        this.searchedPatients.forEach((patient, index) => {
           newChecked.push(patient.patientId);
         });
       }
@@ -141,7 +147,7 @@ export default {
         : "all-checkbox";
     },
     checkAllPatients: function() {
-      const allCounts = this.allPatients.length;
+      const allCounts = this.searchedPatients.length;
       const checkedCounts = this.checkedPatients.length;
       // console.log(allCounts, this.checkedTypes.length);
       return checkedCounts === allCounts
@@ -151,7 +157,7 @@ export default {
         : "all-checkbox";
     }
   },
-  mounted() {
+  created() {
     this.searchedPatients = this.allPatients;
   },
   updated() {
@@ -174,7 +180,7 @@ export default {
     margin: 16px 8px 0 8px;
     font-weight: 500;
     &.sort-heading {
-      margin-top: 60px;
+      margin-top: 32px;
     }
   }
   li {
@@ -330,7 +336,6 @@ export default {
     }
   }
   .sort-type {
-    flex-shrink: 0;
     padding-bottom: 32px;
   }
 }
