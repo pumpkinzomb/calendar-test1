@@ -46,18 +46,16 @@ export default {
   },
   methods: {
     handleEventClick(info) {
-      //   this.handleDetailPopupClose();
+      // console.log(info.event);
       const testInfo = {
         view: true,
         title: info.event.title,
         date_start: info.event.start,
         date_end: info.event.end,
-        attendance_list: [],
-        attendance_list_all: 0,
-        attendance_list_accept_number: 0,
-        event_description: info.event.title,
-        coordinates: { x: info.jsEvent.pageX, y: info.jsEvent.pageY },
-        groupName: "group1"
+        patients_list: [info.event.extendedProps.patients],
+        patients_list_all: info.event.extendedProps.patients.length,
+        event_type: info.event.source.internalEventSource._raw.className,
+        coordinates: { x: info.jsEvent.pageX, y: info.jsEvent.pageY }
       };
       this.event_detail_popup = testInfo;
     },
@@ -65,7 +63,6 @@ export default {
       this.event_detail_popup.view = false;
     },
     handleSelect(info) {
-      console.log(info);
       this.handleDetailPopupClose();
     },
     handleWindowResize(info) {
@@ -87,11 +84,18 @@ export default {
       });
       newEventSources.map(source => {
         source.events = source.events.filter(event => {
-          for (let patient of patients) {
-            if (event.patient.patientId === patient) {
-              return event;
+          for (let group of event.patients) {
+            for (let patient of patients) {
+              if (group.patientId === patient) {
+                return event;
+              }
             }
           }
+          // for (let patient of patients) {
+          //   if (event.patient.patientId === patient) {
+          //     return event;
+          //   }
+          // }
         });
       });
       return newEventSources;
@@ -119,10 +123,6 @@ export default {
         view: false,
         title: "",
         date: "",
-        attendance_list: [],
-        attendance_list_all: 0,
-        attendance_list_accept_number: 0,
-        event_description: "",
         coordinates: { x: 0, y: 0 }
       },
       calendarSize: {
@@ -134,33 +134,39 @@ export default {
           events: [
             {
               id: "a1",
-              patient: {
-                patientId: "aaaaa",
-                patientName: "personA"
-              },
-              title: "eventA personA",
-              start: "2019-09-05T12:30:00",
+              patients: [
+                {
+                  patientId: "aaaaa",
+                  patientName: "personA"
+                }
+              ],
+              title: "AAAAAAA aaaaaaaaaaaaaa aaaaaaa AAAAAAA ",
+              start: "2019-09-05T12:05:00",
               end: "2019-09-05T13:30:00"
             },
             {
               id: "a2",
-              patient: {
-                patientId: "bbbbb",
-                patientName: "  personB"
-              },
+              patients: [
+                {
+                  patientId: "bbbbb",
+                  patientName: "personB"
+                }
+              ],
               title: "eventA personB",
-              start: "2019-09-05T12:30:00",
-              end: "2019-09-05T13:30:00"
+              start: "2019-09-05T00:05:00",
+              end: "2019-09-05T01:30:00"
             },
             {
               id: "a3",
-              patient: {
-                patientId: "bbbbb",
-                patientName: "personB"
-              },
+              patients: [
+                {
+                  patientId: "bbbbb",
+                  patientName: "personB"
+                }
+              ],
               title: "eventA personB",
-              start: "2019-09-05T12:30:00",
-              end: "2019-09-05T13:30:00"
+              start: "2019-09-04T12:30:00",
+              end: "2019-09-04T13:30:00"
             }
             // etc...
           ],
@@ -170,37 +176,101 @@ export default {
           events: [
             {
               id: "a4",
-              patient: {
-                patientId: "aaaaa",
-                patientName: "eventB personA"
-              },
+              patients: [
+                {
+                  patientId: "aaaaa",
+                  patientName: "personA"
+                },
+                {
+                  patientId: "bbbbb",
+                  patientName: "personB"
+                }
+              ],
               title: "eventB personA",
               start: "2019-09-10T12:30:00",
               end: "2019-09-10T13:30:00"
             },
             {
               id: "a5",
-              patient: {
-                patientId: "aaaaa",
-                patientName: "personA"
-              },
-              title: "eventB personA",
+              patients: [
+                {
+                  patientId: "aaaaa",
+                  patientName: "personA"
+                },
+                {
+                  patientId: "hhhhh",
+                  patientName: "cat"
+                }
+              ],
+              title: "personA, cat",
               start: "2019-09-10T12:30:00",
               end: "2019-09-10T13:30:00"
             },
             {
               id: "a6",
-              patient: {
-                patientId: "bbbbb",
-                patientName: "personB"
-              },
+              patients: [
+                {
+                  patientId: "bbbbb",
+                  patientName: "personB"
+                }
+              ],
               title: "eventB personB",
               start: "2019-09-10T12:30:00",
-              end: "2019-09-10T12:30:00"
+              end: "2019-09-10T15:30:00"
             }
             // etc...
           ],
           className: "event-group2"
+        },
+        {
+          events: [
+            {
+              id: "a7",
+              patients: [
+                {
+                  patientId: "bbbbb",
+                  patientName: "personB"
+                }
+              ],
+              title: "eventB personA",
+              start: "2019-09-10T12:30:00",
+              end: "2019-09-10T13:30:00"
+            },
+            {
+              id: "a8",
+              patients: [
+                {
+                  patientId: "aaaaa",
+                  patientName: "personA"
+                },
+                {
+                  patientId: "hhhhh",
+                  patientName: "cat"
+                }
+              ],
+              title: "personA, cat",
+              start: "2019-09-19T12:30:00",
+              end: "2019-09-19T13:30:00"
+            },
+            {
+              id: "a9",
+              patients: [
+                {
+                  patientId: "fffff",
+                  patientName: "personF"
+                },
+                {
+                  patientId: "ggggg",
+                  patientName: "nabi"
+                }
+              ],
+              title: "eventB personB",
+              start: "2019-09-24T12:30:00",
+              end: "2019-09-24T13:30:00"
+            }
+            // etc...
+          ],
+          className: "event-group6"
         }
       ],
       allPatients: [
@@ -242,7 +312,8 @@ export default {
         "Co-op Game",
         "Screen Sharing",
         "Therapist Live",
-        "General"
+        "General",
+        "Video Session Request"
       ]
     };
   },
@@ -385,10 +456,11 @@ export default {
       }
     }
     .fc-more-popover {
-      box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.14),
-        0 9px 46px 8px rgba(0, 0, 0, 0.12), 0 11px 15px -7px rgba(0, 0, 0, 0.2);
+      width: 260px;
+      box-shadow: 0 0 40px 0 rgba(0, 0, 0, 0.2);
       overflow: hidden;
       border: none;
+      box-sizing: border-box;
       .fc-header {
         .fc-title {
           margin: auto;

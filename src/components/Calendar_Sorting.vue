@@ -36,8 +36,8 @@
       </div>
       <ul class="check-list">
         <li v-for="(type,index) of eventTypes" :key="index">
-          <input type="checkbox" :id="index" :value="index" v-model="checkedTypes" />
-          <label :for="index">{{type}}</label>
+          <input type="checkbox" :id="index" :value="index+1" v-model="checkedTypes" />
+          <label :for="index" :class="'type-group'+(index+1)">{{type}}</label>
         </li>
       </ul>
     </div>
@@ -55,7 +55,7 @@ export default {
   data() {
     return {
       checkedPatients: ["aaaaa", "bbbbb", "ccccc", "ddddd", "eeeee", "fffff"],
-      checkedTypes: [0, 1, 2, 3, 4],
+      checkedTypes: [1, 2, 3, 4, 5, 6],
       searchText: "",
       searchedPatients: []
     };
@@ -162,7 +162,7 @@ export default {
 
 <style lang="scss">
 .Sorting {
-  width: 240px;
+  width: 250px;
   flex-shrink: 0;
   padding: 16px;
   box-sizing: border-box;
@@ -221,11 +221,81 @@ export default {
       }
     }
   }
+  input[type="checkbox"]:checked {
+    & + label {
+      &.type-group1 {
+        &::before {
+          border-color: $groupColor1;
+          background: $groupColor1;
+        }
+      }
+      &.type-group2 {
+        &::before {
+          border-color: $groupColor2;
+          background: $groupColor2;
+        }
+      }
+      &.type-group3 {
+        &::before {
+          border-color: $groupColor3;
+          background: $groupColor3;
+        }
+      }
+      &.type-group4 {
+        &::before {
+          border-color: $groupColor4;
+          background: $groupColor4;
+        }
+      }
+      &.type-group5 {
+        &::before {
+          border-color: $groupColor5;
+          background: $groupColor5;
+        }
+      }
+      &.type-group6 {
+        &::before {
+          border-color: $groupColor6;
+          background: $groupColor6;
+        }
+      }
+    }
+  }
   label {
     display: flex;
     align-items: center;
     font-size: $fontSize6;
     cursor: pointer;
+    &.type-group1 {
+      &::before {
+        border-color: $groupColor1;
+      }
+    }
+    &.type-group2 {
+      &::before {
+        border-color: $groupColor2;
+      }
+    }
+    &.type-group3 {
+      &::before {
+        border-color: $groupColor3;
+      }
+    }
+    &.type-group4 {
+      &::before {
+        border-color: $groupColor4;
+      }
+    }
+    &.type-group5 {
+      &::before {
+        border-color: $groupColor5;
+      }
+    }
+    &.type-group6 {
+      &::before {
+        border-color: $groupColor6;
+      }
+    }
   }
   .sort-patient {
     .search {
@@ -252,7 +322,6 @@ export default {
         box-shadow: none;
         width: 8px;
       }
-
       /* Handle */
       &::-webkit-scrollbar-thumb {
         background: $fontColor4;

@@ -182,3 +182,67 @@
         margin-left: -1em;
     }
 }
+
+.icon-ic_delete {
+    .path1:before {
+        content: "\e951";
+    }
+
+    .path2:before {
+        content: "\e952";
+        margin-left: -1em;
+    }
+}
+
+.icon-ic_time {
+    .path1:before {
+        content: "\e97b";
+    }
+
+    .path2:before {
+        content: "\e97c";
+        margin-left: -1em;
+    }
+}
+
+.icon-ic_bin {
+    .path1:before {
+        content: "\e906";
+    }
+
+    .path2:before {
+        content: "\e907";
+        margin-left: -1em;
+    }
+
+    .path3:before {
+        content: "\e999";
+        margin-left: -1em;
+    }
+
+    .path4:before {
+        content: "\e99a";
+        margin-left: -1em;
+    }
+
+    .path5:before {
+        content: "\e99b";
+        margin-left: -1em;
+    }
+}
+
+.icon-ic_edit {
+    .path1:before {
+        content: "\e9a1";
+    }
+
+    .path2:before {
+        content: "\e9a2";
+        margin-left: -1em;
+    }
+
+    .path3:before {
+        content: "\e9a3";
+        margin-left: -1em;
+    }
+}
