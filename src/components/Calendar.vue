@@ -23,7 +23,7 @@
         :dayPopoverFormat="calendarConfig.dayPopoverFormat"
         :titleFormat="calendarConfig.titleFormat"
         :buttonText="calendarConfig.buttonText"
-        :height="calendarConfig.height"
+        :height="windowHeight"
         class="fullCalendar"
         ref="fullCalendar"
       />
@@ -80,6 +80,9 @@ export default {
         width: this.$el.offsetWidth,
         height: this.$el.offsetHeight
       };
+      const checkWindowHeight =
+        window.innerHeight - 70 < 916 ? 915 : window.innerHeight - 70;
+      this.windowHeight = checkWindowHeight;
       this.handleDetailPopupClose();
     },
     sortEventSources(types, patients) {
@@ -365,11 +368,16 @@ export default {
         "General",
         "Video Session Request"
       ],
-      sortingMenu: true
+      sortingMenu: true,
+      windowHeight: 0
     };
   },
+  created() {
+    const checkWindowHeight =
+      window.innerHeight - 70 < 916 ? 915 : window.innerHeight - 70;
+    this.windowHeight = checkWindowHeight;
+  },
   mounted() {
-    console.log(this);
     this.calendarSize = {
       width: this.$el.offsetWidth,
       height: this.$el.offsetHeight
@@ -380,7 +388,9 @@ export default {
     );
     this.setEventSources(sortEventSources);
   },
-  updated() {}
+  updated() {
+    console.log("Calendar_updated");
+  }
 };
 </script>
 

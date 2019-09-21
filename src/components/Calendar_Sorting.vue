@@ -304,6 +304,7 @@ export default {
     }
   }
   .sort-patient {
+    height: calc(100% - 400px);
     .search {
       margin-top: 24px;
       position: relative;
@@ -322,7 +323,7 @@ export default {
     .check-list {
       margin-top: 16px;
       padding-top: 0;
-      height: 240px;
+      height: calc(100% - 187px);
       overflow-y: auto;
       &::-webkit-scrollbar {
         box-shadow: none;
@@ -337,6 +338,7 @@ export default {
   }
   .sort-type {
     padding-bottom: 32px;
+    margin-top: auto;
   }
 }
 </style>

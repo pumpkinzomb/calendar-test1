@@ -40,8 +40,8 @@ const CALENDAR_DEFAULT = {
     week: "week",
     day: "day",
     list: "list"
-  },
-  height: 852
+  }
+  // height: 852
 };
 
 export default CALENDAR_DEFAULT;
