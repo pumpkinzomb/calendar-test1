@@ -76,7 +76,7 @@ export default {
         this.checkedTypes.length !== this.eventTypes.length
       ) {
         this.eventTypes.forEach((type, index) => {
-          newChecked.push(index + 1);
+          newChecked.push(type);
         });
       }
       this.checkedTypes = newChecked;
@@ -138,7 +138,7 @@ export default {
       }
       let newChecked = [];
       newVal.forEach((patient, index) => {
-        newChecked.push(patient.patientId);
+        newChecked.push(patient.patient_id);
       });
       this.checkedPatients = newChecked;
     }
@@ -169,8 +169,10 @@ export default {
     this.searchedPatients = this.allPatients;
     this.checkedTypes = this.eventTypes;
   },
+  mounted() {
+    console.log("mounted");
+  },
   updated() {
-    console.log(this.checkedPatients);
     console.log("updated");
   }
 };

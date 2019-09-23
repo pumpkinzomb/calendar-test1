@@ -191,16 +191,6 @@ export default {
       width: this.$el.offsetWidth,
       height: this.$el.offsetHeight
     };
-    const allCheckedPatients = [];
-    this.allPatients.forEach(patient => {
-      allCheckedPatients.push(patient.patient_id);
-    });
-    console.log(allCheckedPatients);
-    const sortEventSources = this.sortEventSources(
-      this.eventTypes,
-      allCheckedPatients
-    );
-    this.setEventSources(sortEventSources);
   },
   updated() {
     console.log("Calendar_updated");
