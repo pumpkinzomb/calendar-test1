@@ -1,30 +1,321 @@
 <template>
   <div class="Event-Detail-Popup" :style="{top:`${coordinates.y}px`,left:`${coordinates.x}px`}">
-    <div class="Event-contents">
-      <div :class="'Event-title '+eventDetailInfo.event_type">{{eventDetailInfo.title}}</div>
-      <div class="Event-date">
-        <span class="icon-ic_time">
-          <span class="path1"></span>
-          <span class="path2"></span>
-        </span>
-        {{date}}
-      </div>
-      <div class="Event-patients">
-        <div class="patients-heading">
-          <span class="icon-ic_group">
+    <!-- Video Session -->
+    <div v-if="eventDetailInfo.className === 'group1'">
+      <div class="Event-contents">
+        <div :class="'Event-title '+eventDetailInfo.className">Video Session</div>
+        <div class="Event-date">
+          <span class="icon-ic_time">
             <span class="path1"></span>
             <span class="path2"></span>
-            <span class="path3"></span>
-            <span class="path4"></span>
-            <span class="path5"></span>
           </span>
-          {{eventDetailInfo.patients_list_all}} Attendee
+          {{convertTimeString(
+          eventDetailInfo.start,
+          eventDetailInfo.end
+          )}}
+        </div>
+        <div class="Event-patients">
+          <div class="patients-heading">
+            <span class="icon-ic_group">
+              <span class="path1"></span>
+              <span class="path2"></span>
+              <span class="path3"></span>
+              <span class="path4"></span>
+              <span class="path5"></span>
+            </span>
+            {{eventDetailInfo.patients.length}} Attendee
+          </div>
+          <div class="patients-list">
+            <ul>
+              <li v-for="(patient,index) of eventDetailInfo.patients" :key="index">
+                <div class="patient-name">
+                  <span
+                    class="icon-ic_check_circle_fill wait status-icon"
+                    v-if="patient.attendance_state === 'WAIT'"
+                  >
+                    <span class="path1"></span>
+                    <span class="path2"></span>
+                  </span>
+                  <span
+                    class="icon-ic_check_circle_fill accept status-icon"
+                    v-if="patient.attendance_state === 'ACCEPT'"
+                  >
+                    <span class="path1"></span>
+                    <span class="path2"></span>
+                  </span>
+                  <span
+                    class="icon-ic_delete_circle_fill refuse status-icon"
+                    v-if="patient.attendance_state === 'REFUSE'"
+                  >
+                    <span class="path1"></span>
+                    <span class="path2"></span>
+                    <span class="path3"></span>
+                  </span>
+                  <span>{{patient.patient_nickname}}</span>
+                </div>
+                <div class="patient-time">
+                  {{convertTimeString(
+                  patient.patient_start,
+                  patient.patient_end
+                  )}}
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="submit-btns">
+        <button type="button" class="accept-btn">Start Video Session</button>
+      </div>
+    </div>
+    <!-- Co-op Game -->
+    <div v-else-if="eventDetailInfo.className === 'group2'">
+      <div class="Event-contents">
+        <div :class="'Event-title '+eventDetailInfo.className">Co-op Game</div>
+        <div class="Event-date">
+          <span class="icon-ic_time">
+            <span class="path1"></span>
+            <span class="path2"></span>
+          </span>
+          {{convertTimeString(
+          eventDetailInfo.start,
+          eventDetailInfo.end
+          )}}
+        </div>
+        <div class="Event-patients">
+          <div class="patients-heading">
+            <span class="icon-ic_group">
+              <span class="path1"></span>
+              <span class="path2"></span>
+              <span class="path3"></span>
+              <span class="path4"></span>
+              <span class="path5"></span>
+            </span>
+            {{eventDetailInfo.patients.length}} Attendee
+          </div>
+          <div class="patients-list">
+            <ul>
+              <li v-for="(patient,index) of eventDetailInfo.patients" :key="index">
+                <div class="patient-name">
+                  <span
+                    class="icon-ic_check_circle_fill wait status-icon"
+                    v-if="patient.attendance_state === 'WAIT'"
+                  >
+                    <span class="path1"></span>
+                    <span class="path2"></span>
+                  </span>
+                  <span
+                    class="icon-ic_check_circle_fill accept status-icon"
+                    v-if="patient.attendance_state === 'ACCEPT'"
+                  >
+                    <span class="path1"></span>
+                    <span class="path2"></span>
+                  </span>
+                  <span
+                    class="icon-ic_delete_circle_fill refuse status-icon"
+                    v-if="patient.attendance_state === 'REFUSE'"
+                  >
+                    <span class="path1"></span>
+                    <span class="path2"></span>
+                    <span class="path3"></span>
+                  </span>
+                  <span>{{patient.patient_nickname}}</span>
+                </div>
+                <div class="patient-time">
+                  {{convertTimeString(
+                  patient.patient_start,
+                  patient.patient_end
+                  )}}
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
-    <div class="submit-btns">
-      <button type="button" class="accept-btn">Confirm</button>
-      <button type="button">Deny</button>
+    <!-- Screen Sharing -->
+    <div v-else-if="eventDetailInfo.className === 'group3'">
+      <div class="Event-contents">
+        <div :class="'Event-title '+eventDetailInfo.className">Screen Sharing</div>
+        <div class="Event-date">
+          <span class="icon-ic_time">
+            <span class="path1"></span>
+            <span class="path2"></span>
+          </span>
+          {{convertTimeString(
+          eventDetailInfo.start,
+          eventDetailInfo.end
+          )}}
+        </div>
+        <div class="Event-patients">
+          <div class="patients-heading">
+            <span class="icon-ic_group">
+              <span class="path1"></span>
+              <span class="path2"></span>
+              <span class="path3"></span>
+              <span class="path4"></span>
+              <span class="path5"></span>
+            </span>
+            {{eventDetailInfo.patients.length}} Attendee
+          </div>
+          <div class="patients-list">
+            <ul>
+              <li v-for="(patient,index) of eventDetailInfo.patients" :key="index">
+                <div class="patient-name">
+                  <span
+                    class="icon-ic_check_circle_fill wait status-icon"
+                    v-if="patient.attendance_state === 'WAIT'"
+                  >
+                    <span class="path1"></span>
+                    <span class="path2"></span>
+                  </span>
+                  <span
+                    class="icon-ic_check_circle_fill accept status-icon"
+                    v-if="patient.attendance_state === 'ACCEPT'"
+                  >
+                    <span class="path1"></span>
+                    <span class="path2"></span>
+                  </span>
+                  <span
+                    class="icon-ic_delete_circle_fill refuse status-icon"
+                    v-if="patient.attendance_state === 'REFUSE'"
+                  >
+                    <span class="path1"></span>
+                    <span class="path2"></span>
+                    <span class="path3"></span>
+                  </span>
+                  <span>{{patient.patient_nickname}}</span>
+                </div>
+                <div class="patient-time">
+                  {{convertTimeString(
+                  patient.patient_start,
+                  patient.patient_end
+                  )}}
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="submit-btns">
+        <button type="button" class="accept-btn">Start Screen Sharing</button>
+      </div>
+    </div>
+    <!-- Therapist Live -->
+    <div v-else-if="eventDetailInfo.className === 'group4'">
+      <div class="Event-contents">
+        <div :class="'Event-title '+eventDetailInfo.className">Therapist Live</div>
+        <div class="Event-date">
+          <span class="icon-ic_time">
+            <span class="path1"></span>
+            <span class="path2"></span>
+          </span>
+          {{convertTimeString(
+          eventDetailInfo.start,
+          eventDetailInfo.end
+          )}}
+        </div>
+        <div class="Event-live-contents">
+          <div class="subject">
+            <span>Subject</span>
+            {{eventDetailInfo.title}}
+          </div>
+          <div class="summary">{{eventDetailInfo.contents}}</div>
+        </div>
+        <div class="Event-live-link">
+          <span class="icon-ic_connecting">
+            <span class="path1"></span>
+            <span class="path2"></span>
+          </span>
+          <a :href="eventDetailInfo.contents_link" target="_blank">{{eventDetailInfo.contents_link}}</a>
+        </div>
+      </div>
+    </div>
+    <!-- General -->
+    <div v-else-if="eventDetailInfo.className === 'group5'">
+      <div class="Event-contents">
+        <div :class="'Event-title '+eventDetailInfo.className">{{eventDetailInfo.title}}</div>
+        <div class="Event-date">
+          <span class="icon-ic_time">
+            <span class="path1"></span>
+            <span class="path2"></span>
+          </span>
+          {{convertTimeString(
+          eventDetailInfo.start,
+          eventDetailInfo.end
+          )}}
+        </div>
+        <div class="Event-general-contents">{{eventDetailInfo.contents}}</div>
+      </div>
+    </div>
+    <!-- Video Session Request -->
+    <div v-else-if="eventDetailInfo.className === 'group6'">
+      <div class="Event-contents">
+        <div :class="'Event-title '+eventDetailInfo.className">{{eventDetailInfo.title}}</div>
+        <div class="Event-date">
+          <span class="icon-ic_time">
+            <span class="path1"></span>
+            <span class="path2"></span>
+          </span>
+          {{convertTimeString(
+          eventDetailInfo.start,
+          eventDetailInfo.end
+          )}}
+        </div>
+        <div class="Event-patients">
+          <div class="patients-heading">
+            <span class="icon-ic_group">
+              <span class="path1"></span>
+              <span class="path2"></span>
+              <span class="path3"></span>
+              <span class="path4"></span>
+              <span class="path5"></span>
+            </span>
+            {{eventDetailInfo.patients.length}} Attendee
+          </div>
+          <div class="patients-list">
+            <ul>
+              <li v-for="(patient,index) of eventDetailInfo.patients" :key="index">
+                <div class="patient-name">
+                  <span
+                    class="icon-ic_check_circle_fill wait status-icon"
+                    v-if="patient.attendance_state === 'WAIT'"
+                  >
+                    <span class="path1"></span>
+                    <span class="path2"></span>
+                  </span>
+                  <span
+                    class="icon-ic_check_circle_fill accept status-icon"
+                    v-if="patient.attendance_state === 'ACCEPT'"
+                  >
+                    <span class="path1"></span>
+                    <span class="path2"></span>
+                  </span>
+                  <span
+                    class="icon-ic_delete_circle_fill refuse status-icon"
+                    v-if="patient.attendance_state === 'REFUSE'"
+                  >
+                    <span class="path1"></span>
+                    <span class="path2"></span>
+                    <span class="path3"></span>
+                  </span>
+                  <span>{{patient.patient_nickname}}</span>
+                </div>
+                <div class="patient-time">
+                  {{convertTimeString(
+                  patient.patient_start,
+                  patient.patient_end
+                  )}}
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="submit-btns">
+        <button type="button" class="accept-btn">Confirm</button>
+        <button type="button">Deny</button>
+      </div>
     </div>
     <div class="popup-btns">
       <!-- 팝업 컨트롤 버튼 -->
@@ -56,26 +347,15 @@
 
 <script>
 /* eslint-disable */
-
-// title: info.event.title,
-// date_start: info.event.start,
-// date_end: info.event.end,
-// patients_list: [info.event.patients],
-// patients_list_all: info.event.patients.length,
-// event_description: info.event.title,
-// event_type: info.event.className,
-
 export default {
   name: "EventDetailPopup",
   props: {
     eventDetailInfo: {
       title: String,
-      date_start: Date,
-      date_end: Date,
-      patients_list: Array,
-      patients_list_all: Number,
-      patients_list_all: Number,
-      event_description: String,
+      start: Date,
+      end: Date,
+      patients: Array,
+      contents: Object,
       event_type: String,
       coordinates: Object
     }
@@ -108,8 +388,7 @@ export default {
         "Thursday",
         "Friday",
         "Saturday"
-      ],
-      date: ""
+      ]
     };
   },
   methods: {
@@ -118,7 +397,6 @@ export default {
     },
     calculatePosition() {
       let calendarSize = this.$parent.calendarSize;
-      console.log(calendarSize);
       let thisPopupSize = {
         width: this.$el.offsetWidth,
         height: this.$el.offsetHeight
@@ -138,9 +416,9 @@ export default {
         y: calculateY
       };
     },
-    convertTimeString() {
-      const dateStart = this.eventDetailInfo.date_start;
-      const dateEnd = this.eventDetailInfo.date_end;
+    convertTimeString(start, end) {
+      const dateStart = new Date(start);
+      const dateEnd = new Date(end);
       const startHours =
         dateStart.getHours() === 0
           ? `AM 12`
@@ -168,22 +446,29 @@ export default {
       const dateString = `${this.dayName[dateStart.getDay()]}, ${
         this.monthName[dateStart.getMonth()]
       } ${dateStart.getDate()}, ${startHours}:${startMinutes} - ${endHours}:${endMinutes}`;
-      this.date = dateString;
+      return dateString;
     }
   },
   created() {
-    this.convertTimeString();
+    this.convertTimeString(
+      this.eventDetailInfo.start,
+      this.eventDetailInfo.end
+    );
   },
   mounted() {
+    console.log(this.eventDetailInfo);
     this.calculatePosition();
     // console.log("mounted");
   },
   beforeUpdate() {
     this.calculatePosition();
-    this.convertTimeString();
+    this.convertTimeString(
+      this.eventDetailInfo.start,
+      this.eventDetailInfo.end
+    );
   },
   updated() {
-    // console.log("updated");
+    console.log("popup updated");
   }
 };
 </script>
@@ -202,7 +487,7 @@ export default {
   padding: 50px 0 0 0;
   color: $fontColor1;
   .Event-contents {
-    padding: 0 24px 24px 24px;
+    padding: 0 24px 40px 24px;
     .Event-title {
       font-size: $fontSize2;
       font-weight: 500;
@@ -220,32 +505,32 @@ export default {
         border-radius: 50%;
         transform: translate(0, -50%);
       }
-      &.event-group1 {
+      &.group1 {
         &::before {
           background: $groupColor1;
         }
       }
-      &.event-group2 {
+      &.group2 {
         &::before {
           background: $groupColor2;
         }
       }
-      &.event-group3 {
+      &.group3 {
         &::before {
           background: $groupColor3;
         }
       }
-      &.event-group4 {
+      &.group4 {
         &::before {
           background: $groupColor4;
         }
       }
-      &.event-group5 {
+      &.group5 {
         &::before {
           background: $groupColor5;
         }
       }
-      &.event-group6 {
+      &.group6 {
         &::before {
           background: $groupColor6;
         }
@@ -258,7 +543,7 @@ export default {
       align-items: center;
       color: $fontColor2;
       .icon-ic_time {
-        margin-right: 8px;
+        margin-right: 16px;
       }
     }
     .Event-patients {
@@ -270,13 +555,97 @@ export default {
         color: $fontColor2;
 
         .icon-ic_group {
-          margin-right: 8px;
+          margin-right: 16px;
         }
+      }
+      .patients-list {
+        padding-top: 16px;
+        padding-left: 40px;
+        font-size: $fontSize6;
+        color: $fontColor1;
+        li {
+          & + li {
+            margin-top: 12px;
+          }
+        }
+        .status-icon {
+          font-size: $fontSize5;
+          margin-right: 8px;
+          &.accept {
+            color: $uiColor3;
+          }
+          &.wait {
+            color: $uiColor4;
+          }
+          &.refuse {
+            color: $uiColor1;
+          }
+        }
+      }
+      .patient-name {
+        display: flex;
+        align-items: center;
+        line-height: 20px;
+      }
+      .patient-time {
+        font-size: $fontSize7;
+        padding-top: 8px;
+        color: $fontColor3;
+        padding-left: 24px;
+      }
+    }
+    .Event-general-contents {
+      margin: 16px 30px 0 30px;
+      border-top: 1px solid $borderColor1;
+      padding-top: 16px;
+      font-size: $fontSize6;
+      line-height: 24px;
+      color: $fontColor2;
+    }
+    .Event-live-contents {
+      margin: 16px 30px;
+      padding: 16px 0;
+      border-top: 1px solid $borderColor1;
+      border-bottom: 1px solid $borderColor1;
+
+      .subject {
+        font-family: $fontSize5;
+        color: $fontColor1;
+        line-height: 24px;
+        font-weight: 500;
+        span {
+          display: block;
+          margin-bottom: 6px;
+          color: $fontColor2;
+          font-size: $fontSize7;
+          font-weight: 300;
+        }
+      }
+      .summary {
+        padding-top: 16px;
+        font-size: $fontSize6;
+        line-height: 24px;
+        color: $fontColor2;
+      }
+    }
+    .Event-live-link {
+      font-size: $fontSize5;
+      color: $fontColor2;
+      line-height: 20px;
+      display: flex;
+      align-items: center;
+      .icon-ic_connecting {
+        margin-right: 16px;
+      }
+      a {
+        text-decoration: none;
+        color: $fontColor2;
       }
     }
   }
   .submit-btns {
     width: 100%;
+    margin-top: -16px;
     padding: 24px;
     box-sizing: border-box;
     background: $popupBgColor1;

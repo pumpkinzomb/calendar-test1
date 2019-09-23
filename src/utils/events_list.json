@@ -1,0 +1,215 @@
+[
+        {
+          "events": [
+            {
+              "id": "a1",
+              "patients": [
+                {
+                  "patient_id": "aaaaa",
+                  "patient_nickname": "personA"
+                }
+              ],
+              "title": "AAAAAAA aaaaaaaaaaaaaa aaaaaaa AAAAAAA ",
+              "start": "2019-09-05T12:30:00+09:00",
+              "end": "2019-09-05T13:30:00+09:00"
+            },
+            {
+              "id": "a2",
+              "patients": [
+                {
+                  "patient_id": "bbbbb",
+                  "patient_nickname": "personB"
+                }
+              ],
+              "title": "eventA personB",
+              "start": "2019-09-05T00:05:00",
+              "end": "2019-09-05T01:30:00"
+            },
+            {
+              "id": "a3",
+              "patients": [
+                {
+                  "patient_id": "bbbbb",
+                  "patient_nickname": "personB"
+                }
+              ],
+              "title": "eventA personB",
+              "start": "2019-09-04T12:30:00",
+              "end": "2019-09-04T13:30:00"
+            }
+          ],
+          "className": "group1"
+        },
+        {
+          "events": [
+            {
+              "id": "a4",
+              "patients": [
+                {
+                  "patient_id": "aaaaa",
+                  "patient_nickname": "personA"
+                },
+                {
+                  "patient_id": "bbbbb",
+                  "patient_nickname": "personB"
+                }
+              ],
+              "title": "eventB personA",
+              "start": "2019-09-10T12:30:00",
+              "end": "2019-09-10T13:30:00"
+            },
+            {
+              "id": "a5",
+              "patients": [
+                {
+                  "patient_id": "aaaaa",
+                  "patient_nickname": "personA"
+                },
+                {
+                  "patient_id": "hhhhh",
+                  "patient_nickname": "cat"
+                }
+              ],
+              "title": "personA, cat",
+              "start": "2019-09-10T12:30:00",
+              "end": "2019-09-10T13:30:00"
+            },
+            {
+              "id": "a6",
+              "patients": [
+                {
+                  "patient_id": "bbbbb",
+                  "patient_nickname": "personB"
+                }
+              ],
+              "title": "eventB personB",
+              "start": "2019-09-10T12:30:00",
+              "end": "2019-09-10T15:30:00"
+            }
+          ],
+          "className": "group2"
+        },
+        {
+          "events": [
+            {
+              "id": "a7",
+              "patients": [
+                {
+                  "patient_id": "bbbbb",
+                  "patient_nickname": "personB"
+                }
+              ],
+              "title": "eventB personA",
+              "start": "2019-09-10T12:30:00",
+              "end": "2019-09-10T13:30:00"
+            },
+            {
+              "id": "a8",
+              "patients": [
+                {
+                  "patient_id": "aaaaa",
+                  "patient_nickname": "personA"
+                },
+                {
+                  "patient_id": "hhhhh",
+                  "patient_nickname": "cat"
+                }
+              ],
+              "title": "personA, cat",
+              "start": "2019-09-19T12:30:00",
+              "end": "2019-09-19T13:30:00"
+            },
+            {
+              "id": "a9",
+              "patients": [
+                {
+                  "patient_id": "fffff",
+                  "patient_nickname": "personF"
+                },
+                {
+                  "patient_id": "ggggg",
+                  "patient_nickname": "nabi"
+                }
+              ],
+              "title": "eventB personB",
+              "start": "2019-09-24T12:30:00",
+              "end": "2019-09-24T13:30:00"
+            }
+          ],
+          "className": "group6"
+        },
+        {
+          "events": [
+            {
+              "id": "a10",
+              "patients": [
+                {
+                  "patient_id": "ggggg",
+                  "patient_nickname": "nabi"
+                },
+                {
+                  "patient_id": "hhhhh",
+                  "patient_nickname": "cat"
+                }
+              ],
+              "title": "eventB personA",
+              "start": "2019-09-15T12:30:00",
+              "end": "2019-09-15T13:30:00"
+            },
+            {
+              "id": "a11",
+              "patients": [
+                {
+                  "patient_id": "aaaaa",
+                  "patient_nickname": "personA"
+                },
+                {
+                  "patient_id": "hhhhh",
+                  "patient_nickname": "cat"
+                }
+              ],
+              "title": "personA, cat",
+              "start": "2019-09-29T12:30:00",
+              "end": "2019-09-29T13:30:00"
+            }
+          ],
+          "className": "group4"
+        },
+        {
+            "events": [
+              {
+                "id": "a10",
+                "patients": [
+                  {
+                    "patient_id": "ggggg",
+                    "patient_nickname": "nabi"
+                  },
+                  {
+                    "patient_id": "hhhhh",
+                    "patient_nickname": "cat"
+                  }
+                ],
+                "title": "eventB personA",
+                "start": "2019-09-15T12:30:00",
+                "end": "2019-09-15T13:30:00"
+              },
+              {
+                "id": "a11",
+                "patients": [
+                  {
+                    "patient_id": "aaaaa",
+                    "patient_nickname": "personA"
+                  },
+                  {
+                    "patient_id": "hhhhh",
+                    "patient_nickname": "cat"
+                  }
+                ],
+                "title": "",
+                "start": "2019-09-29T12:30:00",
+                "end": "2019-09-29T13:30:00"
+              }
+            ],
+            "className": "group5"
+          }
+      ]

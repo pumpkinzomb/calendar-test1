@@ -21,11 +21,11 @@
         <li v-for="(patient,index) of searchedPatients" :key="index">
           <input
             type="checkbox"
-            :id="patient.patientId"
-            :value="patient.patientId"
+            :id="patient.patient_id"
+            :value="patient.patient_id"
             v-model="checkedPatients"
           />
-          <label :for="patient.patientId">{{patient.patientName}}</label>
+          <label :for="patient.patient_id">{{patient.patient_nickname}}</label>
         </li>
       </ul>
     </div>
@@ -36,8 +36,8 @@
       </div>
       <ul class="check-list">
         <li v-for="(type,index) of eventTypes" :key="index">
-          <input type="checkbox" :id="index" :value="index+1" v-model="checkedTypes" />
-          <label :for="index" :class="'type-group'+(index+1)">{{type}}</label>
+          <input type="checkbox" :id="type" :value="type" v-model="checkedTypes" />
+          <label :for="type" :class="'group'+(index+1)">{{printTypes[index]}}</label>
         </li>
       </ul>
     </div>
@@ -54,8 +54,16 @@ export default {
   },
   data() {
     return {
-      checkedPatients: ["aaaaa", "bbbbb", "ccccc", "ddddd", "eeeee", "fffff"],
-      checkedTypes: [1, 2, 3, 4, 5, 6],
+      printTypes: [
+        "Video Session",
+        "Co-op Game",
+        "Screen Sharing",
+        "Therapist Live",
+        "General",
+        "Video Session Request"
+      ],
+      checkedPatients: [],
+      checkedTypes: [],
       searchText: "",
       searchedPatients: []
     };
@@ -80,7 +88,7 @@ export default {
         this.checkedPatients.length !== this.searchedPatients.length
       ) {
         this.searchedPatients.forEach((patient, index) => {
-          newChecked.push(patient.patientId);
+          newChecked.push(patient.patient_id);
         });
       }
       this.checkedPatients = newChecked;
@@ -94,7 +102,7 @@ export default {
       const re = new RegExp(`^${text}`, "i");
       let SearchedList = [];
       this.allPatients.forEach((patient, index) => {
-        if (re.test(patient.patientName)) {
+        if (re.test(patient.patient_nickname)) {
           SearchedList.push(patient);
         }
       });
@@ -159,8 +167,10 @@ export default {
   },
   created() {
     this.searchedPatients = this.allPatients;
+    this.checkedTypes = this.eventTypes;
   },
   updated() {
+    console.log(this.checkedPatients);
     console.log("updated");
   }
 };
@@ -229,37 +239,37 @@ export default {
   }
   input[type="checkbox"]:checked {
     & + label {
-      &.type-group1 {
+      &.group1 {
         &::before {
           border-color: $groupColor1;
           background: $groupColor1;
         }
       }
-      &.type-group2 {
+      &.group2 {
         &::before {
           border-color: $groupColor2;
           background: $groupColor2;
         }
       }
-      &.type-group3 {
+      &.group3 {
         &::before {
           border-color: $groupColor3;
           background: $groupColor3;
         }
       }
-      &.type-group4 {
+      &.group4 {
         &::before {
           border-color: $groupColor4;
           background: $groupColor4;
         }
       }
-      &.type-group5 {
+      &.group5 {
         &::before {
           border-color: $groupColor5;
           background: $groupColor5;
         }
       }
-      &.type-group6 {
+      &.group6 {
         &::before {
           border-color: $groupColor6;
           background: $groupColor6;
@@ -272,32 +282,32 @@ export default {
     align-items: center;
     font-size: $fontSize6;
     cursor: pointer;
-    &.type-group1 {
+    &.group1 {
       &::before {
         border-color: $groupColor1;
       }
     }
-    &.type-group2 {
+    &.group2 {
       &::before {
         border-color: $groupColor2;
       }
     }
-    &.type-group3 {
+    &.group3 {
       &::before {
         border-color: $groupColor3;
       }
     }
-    &.type-group4 {
+    &.group4 {
       &::before {
         border-color: $groupColor4;
       }
     }
-    &.type-group5 {
+    &.group5 {
       &::before {
         border-color: $groupColor5;
       }
     }
-    &.type-group6 {
+    &.group6 {
       &::before {
         border-color: $groupColor6;
       }

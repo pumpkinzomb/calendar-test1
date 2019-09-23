@@ -3,9 +3,10 @@
     <Sorting :allPatients="allPatients" :eventTypes="eventTypes" ref="sorting" v-if="sortingMenu" />
     <div class="calendar-area">
       <button type="button" class="sorting-btn" @click="toggleSortingMenu">
-        <span class="icon-ic_delete">
+        <span class="icon-ic_sorting">
           <span class="path1"></span>
           <span class="path2"></span>
+          <span class="path3"></span>
         </span>
       </button>
       <FullCalendar
@@ -29,8 +30,8 @@
       />
     </div>
     <EventDetailPopup
-      v-if="event_detail_popup.view"
-      :eventDetailInfo="event_detail_popup"
+      v-if="eventDetailPopup.view"
+      :eventDetailInfo="eventDetailPopup"
       ref="detailPopup"
     ></EventDetailPopup>
   </div>
@@ -45,6 +46,8 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import CALENDAR_DEFAULT from "@/utils/calendar_default.js";
+import eventsList from "@/utils/events_list.json";
+import eventDetail from "@/utils/event_details.json";
 
 export default {
   name: "Calendar",
@@ -55,21 +58,15 @@ export default {
   },
   methods: {
     handleEventClick(info) {
-      // console.log(info);
       const testInfo = {
         view: true,
-        title: info.event.title,
-        date_start: info.event.start,
-        date_end: info.event.end,
-        patients_list: [info.event.extendedProps.patients],
-        patients_list_all: info.event.extendedProps.patients.length,
-        event_type: info.event.source.internalEventSource._raw.className,
-        coordinates: { x: info.jsEvent.pageX, y: info.jsEvent.pageY }
+        coordinates: { x: info.jsEvent.pageX, y: info.jsEvent.pageY },
+        ...eventDetail
       };
-      this.event_detail_popup = testInfo;
+      this.eventDetailPopup = testInfo;
     },
     handleDetailPopupClose() {
-      this.event_detail_popup.view = false;
+      this.eventDetailPopup.view = false;
     },
     handleSelect(info) {
       this.handleDetailPopupClose();
@@ -89,7 +86,7 @@ export default {
       let newEventSources = eval("(" + JSON.stringify(this.eventSources) + ")");
       newEventSources = newEventSources.filter(source => {
         for (const type of types) {
-          if (source.className === `event-group${type}`) {
+          if (source.className === type) {
             return source;
           }
         }
@@ -98,13 +95,13 @@ export default {
         source.events = source.events.filter(event => {
           for (let group of event.patients) {
             for (let patient of patients) {
-              if (group.patientId === patient) {
+              if (group.patient_id === patient) {
                 return event;
               }
             }
           }
           // for (let patient of patients) {
-          //   if (event.patient.patientId === patient) {
+          //   if (event.patient.patient_id === patient) {
           //     return event;
           //   }
           // }
@@ -134,7 +131,7 @@ export default {
     return {
       calendarPlugins: [dayGridPlugin, interactionPlugin, timeGridPlugin],
       calendarConfig: CALENDAR_DEFAULT,
-      event_detail_popup: {
+      eventDetailPopup: {
         view: false,
         title: "",
         date: "",
@@ -144,230 +141,42 @@ export default {
         width: 0,
         height: 0
       },
-      eventSources: [
-        {
-          events: [
-            {
-              id: "a1",
-              patients: [
-                {
-                  patientId: "aaaaa",
-                  patientName: "personA"
-                }
-              ],
-              title: "AAAAAAA aaaaaaaaaaaaaa aaaaaaa AAAAAAA ",
-              start: "2019-09-05T12:05:00",
-              end: "2019-09-05T13:30:00"
-            },
-            {
-              id: "a2",
-              patients: [
-                {
-                  patientId: "bbbbb",
-                  patientName: "personB"
-                }
-              ],
-              title: "eventA personB",
-              start: "2019-09-05T00:05:00",
-              end: "2019-09-05T01:30:00"
-            },
-            {
-              id: "a3",
-              patients: [
-                {
-                  patientId: "bbbbb",
-                  patientName: "personB"
-                }
-              ],
-              title: "eventA personB",
-              start: "2019-09-04T12:30:00",
-              end: "2019-09-04T13:30:00"
-            }
-            // etc...
-          ],
-          className: "event-group1"
-        },
-        {
-          events: [
-            {
-              id: "a4",
-              patients: [
-                {
-                  patientId: "aaaaa",
-                  patientName: "personA"
-                },
-                {
-                  patientId: "bbbbb",
-                  patientName: "personB"
-                }
-              ],
-              title: "eventB personA",
-              start: "2019-09-10T12:30:00",
-              end: "2019-09-10T13:30:00"
-            },
-            {
-              id: "a5",
-              patients: [
-                {
-                  patientId: "aaaaa",
-                  patientName: "personA"
-                },
-                {
-                  patientId: "hhhhh",
-                  patientName: "cat"
-                }
-              ],
-              title: "personA, cat",
-              start: "2019-09-10T12:30:00",
-              end: "2019-09-10T13:30:00"
-            },
-            {
-              id: "a6",
-              patients: [
-                {
-                  patientId: "bbbbb",
-                  patientName: "personB"
-                }
-              ],
-              title: "eventB personB",
-              start: "2019-09-10T12:30:00",
-              end: "2019-09-10T15:30:00"
-            }
-            // etc...
-          ],
-          className: "event-group2"
-        },
-        {
-          events: [
-            {
-              id: "a7",
-              patients: [
-                {
-                  patientId: "bbbbb",
-                  patientName: "personB"
-                }
-              ],
-              title: "eventB personA",
-              start: "2019-09-10T12:30:00",
-              end: "2019-09-10T13:30:00"
-            },
-            {
-              id: "a8",
-              patients: [
-                {
-                  patientId: "aaaaa",
-                  patientName: "personA"
-                },
-                {
-                  patientId: "hhhhh",
-                  patientName: "cat"
-                }
-              ],
-              title: "personA, cat",
-              start: "2019-09-19T12:30:00",
-              end: "2019-09-19T13:30:00"
-            },
-            {
-              id: "a9",
-              patients: [
-                {
-                  patientId: "fffff",
-                  patientName: "personF"
-                },
-                {
-                  patientId: "ggggg",
-                  patientName: "nabi"
-                }
-              ],
-              title: "eventB personB",
-              start: "2019-09-24T12:30:00",
-              end: "2019-09-24T13:30:00"
-            }
-            // etc...
-          ],
-          className: "event-group6"
-        },
-        {
-          events: [
-            {
-              id: "a10",
-              patients: [
-                {
-                  patientId: "ggggg",
-                  patientName: "nabi"
-                },
-                {
-                  patientId: "hhhhh",
-                  patientName: "cat"
-                }
-              ],
-              title: "eventB personA",
-              start: "2019-09-15T12:30:00",
-              end: "2019-09-15T13:30:00"
-            },
-            {
-              id: "a11",
-              patients: [
-                {
-                  patientId: "aaaaa",
-                  patientName: "personA"
-                },
-                {
-                  patientId: "hhhhh",
-                  patientName: "cat"
-                }
-              ],
-              title: "personA, cat",
-              start: "2019-09-29T12:30:00",
-              end: "2019-09-29T13:30:00"
-            }
-            // etc...
-          ],
-          className: "event-group4"
-        }
-      ],
+      eventSources: eventsList,
       allPatients: [
         {
-          patientId: "aaaaa",
-          patientName: "personA"
+          patient_id: "aaaaa",
+          patient_nickname: "personA"
         },
         {
-          patientId: "bbbbb",
-          patientName: "personB"
+          patient_id: "bbbbb",
+          patient_nickname: "personB"
         },
         {
-          patientId: "ccccc",
-          patientName: "personC"
+          patient_id: "ccccc",
+          patient_nickname: "personC"
         },
         {
-          patientId: "ddddd",
-          patientName: "personD"
+          patient_id: "ddddd",
+          patient_nickname: "personD"
         },
         {
-          patientId: "eeeee",
-          patientName: "personE"
+          patient_id: "eeeee",
+          patient_nickname: "personE"
         },
         {
-          patientId: "fffff",
-          patientName: "personF"
+          patient_id: "fffff",
+          patient_nickname: "personF"
         },
         {
-          patientId: "ggggg",
-          patientName: "nabi"
+          patient_id: "ggggg",
+          patient_nickname: "nabi"
         },
         {
-          patientId: "hhhhh",
-          patientName: "cat"
+          patient_id: "hhhhh",
+          patient_nickname: "cat"
         }
       ],
-      eventTypes: [
-        "Video Session",
-        "Co-op Game",
-        "Screen Sharing",
-        "Therapist Live",
-        "General",
-        "Video Session Request"
-      ],
+      eventTypes: ["group1", "group2", "group3", "group4", "group5", "group6"],
       sortingMenu: true,
       windowHeight: 0
     };
@@ -382,9 +191,14 @@ export default {
       width: this.$el.offsetWidth,
       height: this.$el.offsetHeight
     };
+    const allCheckedPatients = [];
+    this.allPatients.forEach(patient => {
+      allCheckedPatients.push(patient.patient_id);
+    });
+    console.log(allCheckedPatients);
     const sortEventSources = this.sortEventSources(
-      this.$refs.sorting.checkedTypes,
-      this.$refs.sorting.checkedPatients
+      this.eventTypes,
+      allCheckedPatients
     );
     this.setEventSources(sortEventSources);
   },
@@ -498,29 +312,34 @@ export default {
           transform: translate(0, -45%);
           border-radius: 50%;
         }
-        &.event-group1 {
+        &.group1 {
           &::before {
             background: $groupColor1;
           }
         }
-        &.event-group2 {
+        &.group2 {
           &::before {
             background: $groupColor2;
           }
         }
-        &.event-group3 {
+        &.group3 {
           &::before {
             background: $groupColor3;
           }
         }
-        &.event-group4 {
+        &.group4 {
           &::before {
             background: $groupColor4;
           }
         }
-        &.event-group5 {
+        &.group5 {
           &::before {
             background: $groupColor5;
+          }
+        }
+        &.group6 {
+          &::before {
+            background: $groupColor6;
           }
         }
       }
