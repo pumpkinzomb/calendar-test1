@@ -1,5 +1,5 @@
 <template>
-  <div class="Sorting">
+  <div class="Sorting" :style="{height:`${windowHeight}px`}">
     <div class="sort-patient">
       <h2>Patient Sorting</h2>
       <div class="search">
@@ -50,7 +50,8 @@ export default {
   name: "Sorting",
   props: {
     allPatients: Array,
-    eventTypes: Array
+    eventTypes: Array,
+    windowHeight: Number
   },
   data() {
     return {
@@ -168,6 +169,7 @@ export default {
   created() {
     this.searchedPatients = this.allPatients;
     this.checkedTypes = this.eventTypes;
+    this.height = this.$parent.windowHeight;
   },
   mounted() {
     console.log("mounted");
@@ -182,12 +184,14 @@ export default {
 .Sorting {
   width: 250px;
   flex-shrink: 0;
-  padding: 16px;
+  padding: 16px 16px 0 16px;
+
   box-sizing: border-box;
   border-right: 1px solid $borderColor1;
   color: $fontColor1;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
   h2 {
     margin: 16px 8px 0 8px;
     font-weight: 500;
@@ -316,7 +320,7 @@ export default {
     }
   }
   .sort-patient {
-    height: calc(100% - 400px);
+    height: calc(100% - 170px);
     .search {
       margin-top: 24px;
       position: relative;
@@ -335,7 +339,7 @@ export default {
     .check-list {
       margin-top: 16px;
       padding-top: 0;
-      height: calc(100% - 187px);
+      height: calc(100% - 200px);
       overflow-y: auto;
       &::-webkit-scrollbar {
         box-shadow: none;

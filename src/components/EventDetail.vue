@@ -1,5 +1,5 @@
 <template>
-  <div class="Event-Detail-Popup" :style="{top:`${coordinates.y}px`,left:`${coordinates.x}px`}">
+  <div class="EventDetail" :style="{top:`${coordinates.y}px`,left:`${coordinates.x}px`}">
     <!-- Video Session -->
     <div v-if="eventDetailInfo.className === 'group1'">
       <div class="Event-contents">
@@ -348,7 +348,7 @@
 <script>
 /* eslint-disable */
 export default {
-  name: "EventDetailPopup",
+  name: "EventDetail",
   props: {
     eventDetailInfo: {
       title: String,
@@ -449,32 +449,19 @@ export default {
       return dateString;
     }
   },
-  created() {
-    this.convertTimeString(
-      this.eventDetailInfo.start,
-      this.eventDetailInfo.end
-    );
-  },
+  created() {},
   mounted() {
-    console.log(this.eventDetailInfo);
     this.calculatePosition();
-    // console.log("mounted");
   },
   beforeUpdate() {
     this.calculatePosition();
-    this.convertTimeString(
-      this.eventDetailInfo.start,
-      this.eventDetailInfo.end
-    );
   },
-  updated() {
-    console.log("popup updated");
-  }
+  updated() {}
 };
 </script>
 
 <style lang='scss'>
-.Event-Detail-Popup {
+.EventDetail {
   z-index: 2;
   box-shadow: 0 0 40px 0 rgba(0, 0, 0, 0.2);
   overflow: hidden;

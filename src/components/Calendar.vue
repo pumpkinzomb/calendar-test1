@@ -1,6 +1,12 @@
 <template>
   <div class="Calendar">
-    <Sorting :allPatients="allPatients" :eventTypes="eventTypes" ref="sorting" v-if="sortingMenu" />
+    <Sorting
+      :allPatients="allPatients"
+      :eventTypes="eventTypes"
+      ref="sorting"
+      v-if="sortingMenu"
+      :windowHeight="windowHeight"
+    />
     <div class="calendar-area">
       <button type="button" class="sorting-btn" @click="toggleSortingMenu">
         <span class="icon-ic_sorting">
@@ -29,11 +35,7 @@
         ref="fullCalendar"
       />
     </div>
-    <EventDetailPopup
-      v-if="eventDetailPopup.view"
-      :eventDetailInfo="eventDetailPopup"
-      ref="detailPopup"
-    ></EventDetailPopup>
+    <EventDetail v-if="eventDetailPopup.view" :eventDetailInfo="eventDetailPopup" ref="detailPopup"></EventDetail>
   </div>
 </template>
 
@@ -41,7 +43,7 @@
 /* eslint-disable */
 import FullCalendar from "@fullcalendar/vue";
 import Sorting from "./Calendar_Sorting.vue";
-import EventDetailPopup from "./EventDetailPopup.vue";
+import EventDetail from "./EventDetail.vue";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
@@ -53,23 +55,29 @@ export default {
   name: "Calendar",
   components: {
     FullCalendar,
-    EventDetailPopup,
+    EventDetail,
     Sorting
   },
   methods: {
     handleEventClick(info) {
-      const testInfo = {
-        view: true,
-        coordinates: { x: info.jsEvent.pageX, y: info.jsEvent.pageY },
-        ...eventDetail
-      };
-      this.eventDetailPopup = testInfo;
+      const id = info.event.id;
+      const zoneOffset = this.clientTime.zone_offset;
+      const uri = `/theraphist/schedule/${id}?zone_offset=${zoneOffset}`;
+      this.$http.get(uri).then(result => {
+        const testInfo = {
+          view: true,
+          coordinates: { x: info.jsEvent.pageX, y: info.jsEvent.pageY },
+          ...result.data
+        };
+        this.eventDetailPopup = testInfo;
+      });
     },
     handleDetailPopupClose() {
       this.eventDetailPopup.view = false;
     },
     handleSelect(info) {
       this.handleDetailPopupClose();
+      console.log(info);
     },
     handleWindowResize(info) {
       //캘린더가 리사이즈될때마다 호출됨
@@ -77,8 +85,7 @@ export default {
         width: this.$el.offsetWidth,
         height: this.$el.offsetHeight
       };
-      const checkWindowHeight =
-        window.innerHeight - 70 < 916 ? 915 : window.innerHeight - 70;
+      const checkWindowHeight = window.innerHeight - 70;
       this.windowHeight = checkWindowHeight;
       this.handleDetailPopupClose();
     },
@@ -100,11 +107,6 @@ export default {
               }
             }
           }
-          // for (let patient of patients) {
-          //   if (event.patient.patient_id === patient) {
-          //     return event;
-          //   }
-          // }
         });
       });
       return newEventSources;
@@ -120,11 +122,35 @@ export default {
       }
     },
     handleDatesRender(info) {
+      this.checkCurrentMonth();
       this.handleDetailPopupClose();
       //캘린더가 event를 렌더링할때마다 호출됨
     },
     toggleSortingMenu() {
       this.sortingMenu = !this.sortingMenu;
+    },
+    checkCurrentMonth() {
+      const calendarApi = this.$refs.fullCalendar.getApi();
+      const getCurrentDate = calendarApi.getDate();
+      const currentYear = getCurrentDate.getFullYear();
+      const currentMonth = getCurrentDate.getMonth() + 1;
+      if (
+        String(currentYear) !== String(this.clientTime.year) ||
+        String(currentMonth) !== String(this.clientTime.month)
+      ) {
+        this.clientTime = {
+          year: currentYear,
+          month: currentMonth,
+          zone_offset: -(getCurrentDate.getTimezoneOffset() / 60)
+        };
+      }
+    },
+    getMonthEvents(year, month, zoneOffset) {
+      const uri = `/theraphist/schedule/theraphist/${year}/${month}?zone_offset=${zoneOffset}`;
+      this.$http.get(uri).then(result => {
+        this.eventSources = result.data;
+        this.setEventSources(this.eventSources);
+      });
     }
   },
   data() {
@@ -141,8 +167,24 @@ export default {
         width: 0,
         height: 0
       },
-      eventSources: eventsList,
+      eventSources: [],
       allPatients: [
+        {
+          patient_id: 120,
+          patient_nickname: "Patient1 Park"
+        },
+        {
+          patient_id: 121,
+          patient_nickname: "Patient2 Park"
+        },
+        {
+          patient_id: 123,
+          patient_nickname: "Patient3 Park"
+        },
+        {
+          patient_id: 124,
+          patient_nickname: "Patient4 Park"
+        },
         {
           patient_id: "aaaaa",
           patient_nickname: "personA"
@@ -178,13 +220,23 @@ export default {
       ],
       eventTypes: ["group1", "group2", "group3", "group4", "group5", "group6"],
       sortingMenu: true,
-      windowHeight: 0
+      windowHeight: 0,
+      clientTime: {
+        year: "",
+        month: "",
+        zone_offset: ""
+      }
     };
   },
   created() {
-    const checkWindowHeight =
-      window.innerHeight - 70 < 916 ? 915 : window.innerHeight - 70;
+    const checkWindowHeight = window.innerHeight - 70;
     this.windowHeight = checkWindowHeight;
+    const today = new Date();
+    this.clientTime = {
+      year: today.getFullYear(),
+      month: today.getMonth() + 1,
+      zone_offset: -(today.getTimezoneOffset() / 60)
+    };
   },
   mounted() {
     this.calendarSize = {
@@ -194,6 +246,11 @@ export default {
   },
   updated() {
     console.log("Calendar_updated");
+  },
+  watch: {
+    clientTime: function(newVal, oldVal) {
+      this.getMonthEvents(newVal.year, newVal.month, newVal.zone_offset);
+    }
   }
 };
 </script>
